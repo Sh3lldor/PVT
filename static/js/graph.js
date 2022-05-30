@@ -11,9 +11,17 @@ $(document).ready(function() {
         // Number 13 is the "Enter" key on the keyboard
         if (!$(".modern-input").is(":focus"))
         {
-            $(".up").animate({"top": '0px'});
-            $(".right").animate({"right": '0px'});
-            $(".left").animate({"left": '0px'});
+            if (event.key == "f") {
+                showAll();
+                $(".modern-input").focus();
+            } else if (event.keyCode == 27) {
+                hideAll();
+                $(".modern-input").blur();
+            } else if (event.key == 's') {
+                viz.stabilize();
+            } else {
+                showAll();
+            }
 
         } else {
             if (event.keyCode == 13) {
@@ -24,10 +32,10 @@ $(document).ready(function() {
                     draw(query = queryValue)
                 }
                 hideAll();
-                $("#Graph").focus();
-                $("#Graph").click();
-            } else if (event.key == "f") {
-                $(".modern-input").focus();
+                $(".modern-input").blur();
+            } else if (event.keyCode == 27) {
+                $(".modern-input").blur();
+                hideAll();
             }
         }
     });
@@ -37,6 +45,12 @@ function hideAll() {
     $(".up").animate({"top": '-95px'});
     $(".right").animate({"right": '-200px'});
     $(".left").animate({"left": '-1000px'});
+}
+
+function showAll() {
+    $(".up").animate({"top": '0px'});
+    $(".right").animate({"right": '0px'});
+    $(".left").animate({"left": '0px'});
 }
 
 $(".stabilize-graph").click(function() {
