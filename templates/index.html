@@ -1,44 +1,73 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
+        <!--link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/all.css') }}"-->
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/fontawesome-free-6.1.1-web/css/all.css') }}">
+    </head>
+    <body>
+        <div class="query">
+            <div class="up">
+                <input class="modern-input" id="query" name="query">
+            </div>
+            <div class="right">
+                <div class="floating-btns">
+                    <a class="submit-graph floating-btn" href="#" title="Stabilize">
+                        <i class="fas fa-stop"></i> Stabilize
+                    </a>
+                    <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
+                        <i class="fas fa-stop"></i> Stabilize
+                    </a>
+                    <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
+                        <i class="fas fa-stop"></i> Stabilize
+                    </a>
+                    <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
+                        <i class="fas fa-stop"></i> Stabilize
+                    </a>
+                    <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
+                        <i class="fas fa-stop"></i> Stabilize
+                    </a>
+                </div>
+            </div>
+            <div class="left">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="overflow:scroll">
+                            <td>Show all users</td>
+                            <td>MATCH (user:users) RETURN user</td>
+                        </tr>
+                        <tr style="overflow:scroll">
+                            <td>Show all servers</td>
+                            <td>MATCH (server:servers) RETURN server</td>
+                        </tr>
+                        <tr style="overflow:scroll">
+                            <td>Show all relationships</td>
+                            <td>MATCH relations=()-->() RETURN relations</td>
+                        </tr>
+                        <tr style="overflow:scroll">
+                            <td>Show all users with X password</td>
+                            <td>MATCH (user:users) where user.password="{}" RETURN user</td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+            </div>
+        </div>
+        <div class="notifications">
+            <div class="noti">
 
-<body>
-    <div class="query">
-        <input class="modern-input" id="query" name="query">
-        <a class="submit-graph floating-btn" id="sumbit" href="#" title="Search">
-            <i class="fas fa-search"></i> Search
-        </a>
-        <a class="stabilize-graph floating-btn" id="stabilize" href="#" title="Stabilize">
-            <i class="fas fa-stop"></i> Stabilize
-        </a>
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>Command</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="overflow:scroll">
-                    <td>Show all users</td>
-                    <td>MATCH (user:users) RETURN user</td>
-                </tr>
-                <tr style="overflow:scroll">
-                    <td>Show all servers</td>
-                    <td>MATCH (server:servers) RETURN server</td>
-                </tr>
-                <tr style="overflow:scroll">
-                    <td>Show all relationships</td>
-                    <td>MATCH relations=()-->() RETURN relations</td>
-                </tr>
-                <tr style="overflow:scroll">
-                    <td>Show all users with X password</td>
-                    <td>MATCH (user:users) where user.password="{}" RETURN user</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            </div>
+        </div>
 
-    <div id="RedeyeGraph" style="height:1000px;"></div>
-</body>
-
-<script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
-<script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>
+        <div id="Graph"></div>
+        <script src="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/js/jquery-3.6.0.min.js') }}"></script>    
+        <script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
+        <script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>
+    </body>
+</html>

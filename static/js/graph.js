@@ -1,19 +1,43 @@
 var viz;
+var timeout;
 
 $(document).ready(function() {
     draw();
 });
 
+$(document).ready(function() {
 
-$(".submit-graph").click(function() {
-    queryValue = document.getElementById("query").value;
-    if (queryValue == "") {
-        draw()
-    } else {
-        draw(query = queryValue)
-    }
+    this.addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (!$(".modern-input").is(":focus"))
+        {
+            $(".up").animate({"top": '0px'});
+            $(".right").animate({"right": '0px'});
+            $(".left").animate({"left": '0px'});
 
-})
+        } else {
+            if (event.keyCode == 13) {
+                queryValue = document.getElementById("query").value;
+                if (queryValue == "") {
+                    draw()
+                } else {
+                    draw(query = queryValue)
+                }
+                hideAll();
+                $("#Graph").focus();
+                $("#Graph").click();
+            } else if (event.key == "f") {
+                $(".modern-input").focus();
+            }
+        }
+    });
+});
+
+function hideAll() {
+    $(".up").animate({"top": '-95px'});
+    $(".right").animate({"right": '-200px'});
+    $(".left").animate({"left": '-1000px'});
+}
 
 $(".stabilize-graph").click(function() {
     viz.stabilize();
@@ -48,27 +72,18 @@ $(".table").find("td:nth-child(2)").click(function() {
 
 function draw(query = "MATCH relations=()-->() RETURN relations") {
     var config = {
-        container_id: "RedeyeGraph",
+        container_id: "Graph",
         server_url: "bolt://localhost:7687",
         server_user: "neo4j",
-        server_password: "redeye",
+        server_password: "pass",
         labels: {
-            "users": {
-                caption: "username",
-                "font": {
-                    "size": 24,
-                    "color": "black"
-                },
-                "image": 'static\\pics\\graph\\user.png'
-            },
-            "servers": {
+            "endpoints": {
                 caption: "ip",
                 "font": {
                     "size": 24,
                     "color": "black"
-                },
-                "image": 'static\\pics\\graph\\server.png'
-            },
+                }
+            }
         },
         relationships: {
             "userTo": {
