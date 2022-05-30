@@ -1,5 +1,4 @@
 from neo4j import *
-
 import os
 import sys
 
@@ -11,45 +10,81 @@ password = os.getenv("NEO4J_PASSWORD", "pass")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "PVT")
 
-driver = GraphDatabase.driver(url, auth=basic_auth(username, password))
+class Graph:
+    def __init__(self):
+        self.driver = GraphDatabase.driver(url, auth=(username, password))
+
+    def close(self):
+        self.driver.close()
+
+    def executeWriteQuery(self,func):
+        with self.driver.session() as session:
+            session.write_transaction(func)
+
+    def executeReadQuery(self,func,obj):
+        with self.driver.session() as session:
+            return session.read_transaction(func, obj)
+    
+    def isNodeExsist(self,data):
+        def getRelation(tx,d):
+            dstQuery = """ MATCH  (source:endpoints), (destination:endpoints) where source.ip="%s" and destination.ip="%s" RETURN EXISTS( (source)-[:%s {destinationPort:"%s"}]-(destination) ) """ \
+            % (d["source"],d["destination"],d["type"],d["destinationPort"])
+
+            srcQuery = """ MATCH  (source:endpoints), (destination:endpoints) where source.ip="%s" and destination.ip="%s" RETURN EXISTS( (source)-[:%s {sourcePort:"%s"}]-(destination) ) """ \
+            % (d["source"],d["destination"],d["type"],d["sourcePort"])
+
+            dstRes = tx.run(dstQuery).value()[0]
+            srcRes = tx.run(srcQuery).value()[0]
+
+            return dstRes,srcRes
+        return self.executeReadQuery(getRelation,data)
 
 
-#
-#
-#
-#
-# Server Node -> Relationship {Port1,Port2,Number of packets}
-#
-# 
-#
-# 
+    def runQuery(self,action,data):
+        def addServerNode(tx):
+            if "ip" in data.keys():
+                q = """ MERGE (endpoint:endpoints {ip:"%s",mac:"%s"}) """ % (data["ip"],data["mac"])
+            else:
+                q = """ MERGE (endpoint:endpoints {mac:"%s"}) """ % (data["mac"])
+            tx.run(q)
+            
+        
+        def addOneSidedRelation(tx):
+            asDest, asSrc = self.isNodeExsist(data)
+            if not asDest and not asSrc:
+                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:UDP {sourcePort:"%s",destinationPort:"%s"}]->(destination) return type(r) """ \
+                % (data["source"],data["destination"],data["sourcePort"],data["destinationPort"])
+                tx.run(q)
 
+        def addTwoSidedRelation(tx):
+            asDest, asSrc = self.isNodeExsist(data)
+            if not asDest and not asSrc:
+                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:TCP {sourcePort:"%s",destinationPort:"%s"}]-(destination) return type(r) """ \
+                % (data["source"],data["destination"],data["sourcePort"],data["destinationPort"])
+                tx.run(q)
+        
+        def addLayer3Relation(tx):
+            q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s]-(destination) return type(r) """ \
+            % (data["source"],data["destination"],data["type"])
+            tx.run(q)
+        
+        def addLayer2Relation(tx):
+            q = """ match (source:endpoints), (destination:endpoints) WHERE source.mac="%s" AND destination.mac="%s" MERGE (source)-[r:%s]-(destination) return type(r) """ \
+            % (data["source"],data["destination"],data["type"])
+            tx.run(q)
+        
 
-def addServerNode(ip,mac):
-    def addEndpoint(tx):
-        q = """ CREATE (endpoint:endpoints {ip:"%s",mac:"%s"}) """ % (ip,mac)
-        tx.run(q)
+        if action == "AddServer":
+            self.executeWriteQuery(addServerNode)
 
-    executeWriteQuery(addEndpoint)
+        elif action == "AddUDPRelation":
+            self.executeWriteQuery(addOneSidedRelation)
+        
+        elif action == "AddTCPRelation":
+            self.executeWriteQuery(addTwoSidedRelation)
+        
+        elif action == "AddICMPRelation":
+            self.executeWriteQuery(addLayer3Relation)
 
-def init():
-    def query(tx):
-        q = "CREATE (endpoints)"
-        tx.run(q)
-
-    executeWriteQuery(query)
-
-def executeWriteQuery(func):
-    with driver.session() as session:
-        session.write_transaction(func)
-
-    driver.close()
-
-
-def executeReadQuery(func, obj):
-    with driver.session() as session:
-        res = session.read_transaction(func, obj)
-
-    driver.close()
-
-    return res
+        elif action == "AddARPRelation":
+            self.executeWriteQuery(addLayer2Relation)

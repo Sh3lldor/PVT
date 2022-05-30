@@ -1,10 +1,12 @@
+from traceback import print_exception
 import scapy.all
-from packet import TCPPacket, UDPPacket
+from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket
 from scapy.layers.l2 import ARP
 from scapy.layers.dns import DNS, DNSQR
 from scapy.layers.inet import TCP, UDP, ICMP, IP
 
-sessions = dict()
+tcpSessions = dict()
+udpSession = dict()
 
 def getTCPPacketInfo(packet):
     srcIP = packet[IP].src
@@ -38,43 +40,50 @@ def getUDPPacketInfo(packet):
      "destinationMac" : dstMac
     }
 
+def getICMPacketInfo(packet):
+    srcIP = packet[IP].src
+    dstIP = packet[IP].dst
+    srcMac = packet['Ether'].src
+    dstMac = packet['Ether'].dst
+    return {
+     "soruceIP" : srcIP,
+     "destinationIP" : dstIP,
+     "sourceMac" : srcMac,
+     "destinationMac" : dstMac
+    }
+
+def getARPacketInfo(packet):
+    srcMac = packet['Ether'].src
+    dstMac = packet['Ether'].dst
+    return {
+     "sourceMac" : srcMac,
+     "destinationMac" : dstMac
+    }
+
 def parse(pcap):
     pkts = scapy.all.rdpcap(pcap)
 
     for packet in pkts:
+        # Layer 3 and above
         if IP in packet:
-            if TCP in packet:
-                tcpData = getTCPPacketInfo(packet)
-                tcpPacket = TCPPacket(
-                    tcpData['sourceMac'],
-                    tcpData['destinationMac'],
-                    tcpData['soruceIP'],
-                    tcpData['destinationIP'],
-                    tcpData['sourcePort'],
-                    tcpData['destinationPort']
-                )
-                #print(tcpPacket.getSourceIp() ," -> ", tcpPacket.getDestinationIp())
-            
-            elif UDP in packet:
+            if UDP in packet:
                 udpData = getUDPPacketInfo(packet)
-                udpPacket = UDPPacket(
-                    udpData['sourceMac'],
-                    udpData['destinationMac'],
-                    udpData['soruceIP'],
-                    udpData['destinationIP'],
-                    udpData['sourcePort'],
-                    udpData['destinationPort']
-                )
+                udpPacket = UDPPacket(udpData)
+                udpPacket.addNodes()
+            
+            elif TCP in packet:
+                tcpData = getTCPPacketInfo(packet)
+                tcpPacket = TCPPacket(tcpData)
+                tcpPacket.addNodes()
 
-                if udpPacket.getSourceIp() not in sessions:
-                    udpPacket.addNodesToGraph(udpPacket.getSourceIp(),udpPacket.getSourceMac())
-                    sessions[udpPacket.getSourceIp()] = udpPacket
+            elif ICMP in packet:
+                icmpData = getICMPacketInfo(packet)
+                icmpPacket = ICMPPacket(icmpData)
+                icmpPacket.addNodes()
 
-                elif udpPacket.getDestinationIp() not in sessions:
-                    udpPacket.addNodesToGraph(udpPacket.getDestinationIp(),udpPacket.getDestinationMac())
-                    sessions[udpPacket.getDestinationIp()] = udpPacket
-
-
-
-
-
+        # Layer 2
+        else:
+            if ARP in packet:
+                arpData = getARPacketInfo(packet)
+                arpPacket = ARPPacket(arpData)
+                arpPacket.addNodes()

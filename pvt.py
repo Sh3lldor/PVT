@@ -25,7 +25,7 @@ def showHelpMenu():
     print(description)
 
 
-def startPVT(pcap="Test/t.pcapng",help=False):
+def startPVT(pcap="Test/fuzz-2022-05-26-7046.pcap",help=False):
     if help:
         showHelpMenu()
         sys.exit(0)
