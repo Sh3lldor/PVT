@@ -34,8 +34,8 @@ $(document).ready(function() {
                 hideAll();
                 $(".modern-input").blur();
             } else if (event.keyCode == 27) {
-                $(".modern-input").blur();
                 hideAll();
+                $(".modern-input").blur();
             }
         }
     });
