@@ -22,7 +22,7 @@ body {
     z-index: 200;
     padding-left: 25px;
     left: 0px;
-    bottom: 25px;
+    top: 25px;
 }
 
 .modern-input {
@@ -35,13 +35,14 @@ body {
     height: 50px;
     transform: translateX(-50%);
     font-size: 24px;
-    padding: 5px;
+    padding: 15px;
     box-shadow: 0 0 10px black;
     transition-duration: 0.3s;
 }
 
 .modern-input:focus {
     border: 0.5px solid #ccc;
+    width: 800px;
 }
 
 .submit-graph {
@@ -76,11 +77,12 @@ body {
     color: #eef;
 }
 
+/*
 .query .table {
-    box-shadow: 4px 4px 10px black !important;
+    box-shadow: 4px 4px 10px black;
     border-radius: 15px;
-    width: 700px !important;
-    background-color: #31353D !important;
+    width: 700px;
+    background-color: #31353D;
     border-color: transparent;
     border-radius: 10px;
 }
@@ -99,7 +101,7 @@ body {
 .table-dark thead th {
     border-color: #31353D;
     text-align: center;
-}
+}*/
 
 #Graph {
     height: 100vh;
@@ -109,4 +111,44 @@ body {
 
 .notifications {
     display: none;
+}
+
+.commands-section {
+    width: 700px;
+    height: auto;
+    background-color: rgb(67, 72, 82);
+    padding: 20px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 15px black;
+
+}
+
+.commands-section .title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #ccd;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 1px black;
+}
+
+.commands-section .commands {
+    display: grid;
+}
+
+.commands-section .command {
+    color: #ccd;
+    padding: 5px 15px;
+    font-size: 20px;
+    text-align: center;
+    background-color: rgb(49, 53, 61);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    text-decoration: none;
+}
+
+.commands-section .command:hover {
+    filter: brightness(110%);
 }

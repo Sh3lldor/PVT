@@ -57,22 +57,8 @@ $(".stabilize-graph").click(function() {
     viz.stabilize();
 })
 
-
-$(".modern-input").each(function() {
-    this.addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {
-            queryValue = document.getElementById("query").value;
-            if (queryValue == "") {
-                draw()
-            } else {
-                draw(query = queryValue)
-            }
-        }
-    })
-})
-
-$(".table").find("td:nth-child(2)").click(function() {
-    queryValue = $(this).text();
+$(".command").click(function() {
+    queryValue = $(this).attr("title");
     if (queryValue.includes("{}")) {
 
         value = prompt("Value:");
@@ -100,10 +86,23 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
             }
         },
         relationships: {
-            "userTo": {
-                caption: false,
-                tickness: "weight",
+            "TCP": {
+                caption: true,
+                tickness: "weight"
             },
+            "UDP" :{
+                caption: true,
+                tickness: "weight"
+            },
+            "ICMP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "ARP": {
+                caption: true,
+                tickness: "weight"
+            },
+
             [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
                 "thickness": "defaultThicknessProperty",
                 "caption": "defaultCaption"
