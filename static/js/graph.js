@@ -101,6 +101,10 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
                 caption: true,
                 tickness: "weight"
             },
+            "HTTP_REQUEST": {
+                caption: true,
+                tickness: "weight"
+            },
 
             [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
                 "thickness": "defaultThicknessProperty",
