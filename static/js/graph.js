@@ -9,8 +9,7 @@ $(document).ready(function() {
 
     this.addEventListener("keyup", function(event) {
         // Number 13 is the "Enter" key on the keyboard
-        if (!$(".modern-input").is(":focus"))
-        {
+        if (!$(".modern-input").is(":focus")) {
             if (event.key == "f") {
                 showAll();
                 $(".modern-input").focus();
@@ -42,15 +41,15 @@ $(document).ready(function() {
 });
 
 function hideAll() {
-    $(".up").animate({"top": '-95px'});
-    $(".right").animate({"right": '-200px'});
-    $(".left").animate({"left": '-1000px'});
+    $(".up").animate({ "top": '-95px' });
+    $(".right").animate({ "right": '-200px' });
+    $(".left").animate({ "left": '-1000px' });
 }
 
 function showAll() {
-    $(".up").animate({"top": '0px'});
-    $(".right").animate({"right": '0px'});
-    $(".left").animate({"left": '0px'});
+    $(".up").animate({ "top": '0px' });
+    $(".right").animate({ "right": '0px' });
+    $(".left").animate({ "left": '0px' });
 }
 
 
@@ -80,7 +79,7 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
         container_id: "Graph",
         server_url: "bolt://localhost:7687",
         server_user: "neo4j",
-        server_password: "pass",
+        server_password: "test",
         labels: {
             "endpoints": {
                 caption: "ip",
@@ -96,7 +95,7 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
                 caption: true,
                 tickness: "weight"
             },
-            "UDP" :{
+            "UDP": {
                 caption: true,
                 tickness: "weight"
             },
@@ -105,6 +104,10 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
                 tickness: "weight"
             },
             "ARP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "HTTP_REQUEST": {
                 caption: true,
                 tickness: "weight"
             },

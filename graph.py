@@ -6,7 +6,7 @@ import sys
 neoServer = "localhost"
 url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
-password = os.getenv("NEO4J_PASSWORD", "pass")
+password = os.getenv("NEO4J_PASSWORD", "test")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "PVT")
 
@@ -52,15 +52,15 @@ class Graph:
         def addOneSidedRelation(tx):
             asDest, asSrc = self.isNodeExsist(data)
             if not asDest and not asSrc:
-                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:UDP {sourcePort:"%s",destinationPort:"%s"}]->(destination) return type(r) """ \
-                % (data["source"],data["destination"],data["sourcePort"],data["destinationPort"])
+                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s {sourcePort:"%s",destinationPort:"%s"}]->(destination) return type(r) """ \
+                % (data["source"],data["destination"],data["type"],data["sourcePort"],data["destinationPort"])
                 tx.run(q)
 
         def addTwoSidedRelation(tx):
             asDest, asSrc = self.isNodeExsist(data)
             if not asDest and not asSrc:
-                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:TCP {sourcePort:"%s",destinationPort:"%s"}]-(destination) return type(r) """ \
-                % (data["source"],data["destination"],data["sourcePort"],data["destinationPort"])
+                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s {sourcePort:"%s",destinationPort:"%s"}]-(destination) return type(r) """ \
+                % (data["source"],data["destination"],data["type"],data["sourcePort"],data["destinationPort"])
                 tx.run(q)
         
         def addLayer3Relation(tx):
@@ -71,6 +71,11 @@ class Graph:
         def addLayer2Relation(tx):
             q = """ match (source:endpoints), (destination:endpoints) WHERE source.mac="%s" AND destination.mac="%s" MERGE (source)-[r:%s]-(destination) return type(r) """ \
             % (data["source"],data["destination"],data["type"])
+            tx.run(q)
+
+        def updateRelation(tx):
+            q = """ match (source:endpoints {ip:"%s"})-[r:%s]->(destination:endpoints {ip:"%s"}) CREATE (source)-[r2:%s]->(destination) SET r2 = r WITH r DELETE r""" \
+            % (data["source"],data["type"],data["destination"],data["newType"])
             tx.run(q)
         
 
@@ -88,3 +93,6 @@ class Graph:
 
         elif action == "AddARPRelation":
             self.executeWriteQuery(addLayer2Relation)
+        
+        elif action == "UpdateTCPRelation":
+            self.executeWriteQuery(updateRelation)

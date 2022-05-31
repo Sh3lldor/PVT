@@ -18,12 +18,13 @@ class Packet:
 
 
 class TCPPacket(Packet):
-    def __init__(self,tcpData):
+    def __init__(self,tcpData,layer4):
         super().__init__(tcpData['sourceMac'], tcpData['destinationMac'])
         self.srcIP = tcpData['soruceIP']
         self.dstIP = tcpData['destinationIP']
         self.srcPort = tcpData['sourcePort']
         self.dstPort = tcpData['destinationPort']
+        self.layer4 = layer4
 
     def getSourceIp(self):
         return self.srcIP
@@ -36,18 +37,26 @@ class TCPPacket(Packet):
 
     def getDestinationPort(self):
         return self.dstPort
+    
+    def getLayer4(self):
+        return self.layer4
 
     def addNodes(self):
-        add4thLayerNodesToGraph(self,"AddTCPRelation","TCP")
+        add4thLayerNodesToGraph(self,"AddTCPRelation",self.getLayer4())
+    
+    def updateRelation(self, newRelation, oldRelation):
+        update4thLayerNodesToGraph(self,"UpdateTCPRelation",oldRelation, newRelation)
+
 
 
 class UDPPacket(Packet):
-    def __init__(self,udpData):
+    def __init__(self,udpData,layer4):
         super().__init__(udpData['sourceMac'], udpData['destinationMac'])
         self.srcIP = udpData['soruceIP']
         self.dstIP = udpData['destinationIP']
         self.srcPort = udpData['sourcePort']
         self.dstPort = udpData['destinationPort']
+        self.layer4 = layer4
 
     def getSourceIp(self):
         return self.srcIP
@@ -61,8 +70,11 @@ class UDPPacket(Packet):
     def getDestinationPort(self):
         return self.dstPort
     
+    def getLayer4(self):
+        return self.layer4
+    
     def addNodes(self):
-        add4thLayerNodesToGraph(self,"AddUDPRelation","UDP")
+        add4thLayerNodesToGraph(self,"AddUDPRelation",self.getLayer4())
 
 
 class ICMPPacket(Packet):
@@ -119,6 +131,19 @@ def add4thLayerNodesToGraph(obj,query,type):
             
         graph.runQuery(query,data)
 
+
+def update4thLayerNodesToGraph(obj,query,oldRelation,newRelation):
+        sourceIp = obj.getSourceIp()
+        destinationIp = obj.getDestinationIp()
+
+        data = {
+            "source": sourceIp, 
+            "destination": destinationIp, 
+            "type": oldRelation,
+            "newType": newRelation
+            }
+            
+        graph.runQuery(query,data)
 
 def add3rdLayerNodesToGraph(obj,query,type):
         sourceMac = obj.getSourceMac()
