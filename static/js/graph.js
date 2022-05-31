@@ -53,6 +53,11 @@ function showAll() {
     $(".left").animate({"left": '0px'});
 }
 
+
+$(".stabilize-graph").click(function() {
+    //viz.();
+})
+
 $(".stabilize-graph").click(function() {
     viz.stabilize();
 })
@@ -80,8 +85,9 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
             "endpoints": {
                 caption: "ip",
                 "font": {
-                    "size": 24,
-                    "color": "black"
+                    "size": 35,
+                    "color": "black",
+                    "face":'arial'
                 }
             }
         },
@@ -113,7 +119,8 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
         initial_cypher: query,
         arrows: true,
         hierarchical_layout: true,
-        hierarchical_sort_method: "directed"
+        hierarchical_sort_method: "directed",
+        
     };
 
     viz = new NeoVis.default(config);
