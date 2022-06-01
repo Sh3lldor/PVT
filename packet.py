@@ -72,6 +72,9 @@ class UDPPacket(Packet):
     def getLayer4(self):
         return self.layer4
     
+    def updateRelation(self, newRelation, oldRelation):
+        update4thLayerNodesToGraph(self,"UpdateUDPRelation",oldRelation, newRelation)
+    
     def addNodes(self):
         add4thLayerNodesToGraph(self,"AddUDPRelation",self.getLayer4())
 
@@ -130,7 +133,6 @@ def add4thLayerNodesToGraph(obj,query,type):
             
         graph.runQuery(query,data)
 
-
 def update4thLayerNodesToGraph(obj,query,oldRelation,newRelation):
         sourceIp = obj.getSourceIp()
         destinationIp = obj.getDestinationIp()
@@ -169,7 +171,6 @@ def add3rdLayerNodesToGraph(obj,query,type):
             }
 
         graph.runQuery(query,data)
-
 
 def add2ndLayerNodesToGraph(obj,query,type):
         sourceMac = obj.getSourceMac()

@@ -96,3 +96,6 @@ class Graph:
         
         elif action == "UpdateTCPRelation":
             self.executeWriteQuery(updateRelation)
+        
+        elif action == "UpdateUDPRelation":
+            self.executeWriteQuery(updateRelation)
