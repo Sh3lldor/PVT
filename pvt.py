@@ -25,7 +25,7 @@ def showHelpMenu():
     print(description)
 
 
-def startPVT(pcap="Test/t.pcapng", help=False, debug=False, port=5000):
+def startPVT(pcap="Test/t.pcapng", help=False, debug=False, prod=False,port=5000):
     if help:
         showHelpMenu()
         sys.exit(0)
@@ -33,10 +33,11 @@ def startPVT(pcap="Test/t.pcapng", help=False, debug=False, port=5000):
     if pcap:
         helper.parse(pcap)
 
-    if debug:
-        app.run(debug=True, host='0.0.0.0', port=port)
-    else:
-        app.run(debug=False, host='0.0.0.0', port=port)
+    if prod:
+        if debug:
+            app.run(debug=True, host='0.0.0.0', port=port)
+        else:
+            app.run(debug=False, host='0.0.0.0', port=port)
 
 
 

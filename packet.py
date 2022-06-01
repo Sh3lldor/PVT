@@ -48,7 +48,6 @@ class TCPPacket(Packet):
         update4thLayerNodesToGraph(self,"UpdateTCPRelation",oldRelation, newRelation)
 
 
-
 class UDPPacket(Packet):
     def __init__(self,udpData,layer4):
         super().__init__(udpData['sourceMac'], udpData['destinationMac'])

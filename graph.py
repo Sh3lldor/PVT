@@ -74,7 +74,7 @@ class Graph:
             tx.run(q)
 
         def updateRelation(tx):
-            q = """ match (source:endpoints {ip:"%s"})-[r:%s]->(destination:endpoints {ip:"%s"}) CREATE (source)-[r2:%s]->(destination) SET r2 = r WITH r DELETE r""" \
+            q = """ match (source:endpoints {ip:"%s"})-[r:%s]->(destination:endpoints {ip:"%s"}) MERGE (source)-[r2:%s]->(destination) SET r2 = r WITH r DELETE r""" \
             % (data["source"],data["type"],data["destination"],data["newType"])
             tx.run(q)
         

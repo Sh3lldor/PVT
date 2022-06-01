@@ -1,30 +1,36 @@
 import scapy.all
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket
 from scapy.layers.l2 import ARP
-from scapy.layers.dns import DNS, DNSQR
+from scapy.layers.dns import DNS
 from scapy.layers.inet import TCP, UDP, ICMP, IP
-from scapy.layers.http import HTTP                                  # TCP
-from scapy.layers.dhcp import DHCP                                  # UDP
-from scapy.layers.dhcp6 import DHCP6                                # UDP
-from scapy.layers.hsrp import HSRP                                  # TCP
-from scapy.layers.llmnr import LLMNRQuery,LLMNRResponse             # TCP
-from scapy.layers.netbios import NetBIOS_DS                         # TCP
-from scapy.layers.ntp import NTP                                    # TCP
-from scapy.layers.radius import Radius                              # TCP
-from scapy.layers.rip import RIP                                    # TCP
-from scapy.layers.smb import SMBNetlogon_Protocol_Response_Header   # TCP
-from scapy.layers.smb2 import SMB2_Header                           # TCP
-from scapy.layers.snmp import SNMP                                  # TCP
-from scapy.layers.tftp import TFTP                                  # TCP
-import re
+from scapy.layers.http import HTTP                                         # TCP
+from scapy.layers.dhcp import DHCP                                         # UDP                            # UDP
+from scapy.layers.hsrp import HSRP                                         # TCP
+from scapy.layers.llmnr import LLMNRQuery,LLMNRResponse                    # TCP
+from scapy.layers.netbios import NBNSQueryRequest, NBNSQueryResponse       # TCP
+from scapy.layers.ntp import NTP                                           # TCP
+from scapy.layers.radius import Radius                                     # TCP
+from scapy.layers.rip import RIP                                           # TCP
+from scapy.layers.smb import SMBNetlogon_Protocol_Response_Header          # TCP
+from scapy.layers.smb2 import SMB2_Header                                  # TCP
+from scapy.layers.snmp import SNMP                                         # TCP
+from scapy.layers.tftp import TFTP                                         # TCP
 
 HTTP_REQUEST_PACKET = "HTTP_REQUEST"
 HTTP_RESPONSE_PACKET = "HTTP_RESPONSE"
+DNS_QUERY_PACKET = "DNS_QUERY"
+DNS_ANSWER_PACKET = "DNS_ANSWER"
+DHCP_PACKET = "DHCP"
+HSRP_PACKET = "HSRP"
+LLMNR_QUERY_PACKET = "LLMNR_Query"
+LLMNR_RESPONSE_PACKET = "LLMNR_Response"
+NBNS_QUERY_PACKET = "NBNS_Query"
+NBNS_RESPONSE_PACKET = "NBNS_Response"
 TCP_PACKET = "TCP"
 UDP_PACKET = "UDP"
 
 tcpSessions = []
-udpSession = dict()
+udpSessions = []
 httpReq = "HTTP"
 
 def getTCPPacketInfo(packet):
@@ -80,7 +86,8 @@ def getARPacketInfo(packet):
     }
 
 def compareLayer4Session(sessions,data):
-    """If we got a packet the is the same but to the opposite side, skip.
+    """
+    If we got a packet the is the same but to the opposite side, skip.
        This will filter TCP/UDP sessions.
 
     Args:
@@ -99,19 +106,23 @@ def compareLayer4Session(sessions,data):
     
     return False
 
-
 def compareLayer4Relation(sessions,data):
+    """
+    Checks if there is an active session in a lower layer,
+    If exsists - returns True else False.
+
+    Args:
+        sessions ([{},{}]): active TCP/UDP sessions
+        data (string): the current packet
+
+    Returns:
+        _type_: BOOL (True/False)
+    """
     for session in sessions:
         if session["destinationIP"] == data["destinationIP"] or \
             session["soruceIP"] == data["soruceIP"] and \
                 session["sourcePort"] == data["sourcePort"] or \
                     session["destinationPort"] == data["destinationPort"]:
-                        print(session)
-        if session["destinationIP"] == data["destinationIP"] or \
-            session["soruceIP"] == data["soruceIP"] and \
-                session["sourcePort"] == data["sourcePort"] or \
-                    session["destinationPort"] == data["destinationPort"]:
-                        print("True")
                         return True
     
     return False
@@ -124,9 +135,45 @@ def parse(pcap):
         # Layer 3 and above
         if IP in packet:
             if UDP in packet:
+                packetType = UDP_PACKET
                 udpData = getUDPPacketInfo(packet)
-                udpPacket = UDPPacket(udpData,"udp")
-                udpPacket.addNodes()
+                udpPacket = UDPPacket(udpData,UDP_PACKET)
+
+                # UDP Packet
+                if DNS in packet:
+                    if "Qry" in packet[DNS].mysummary():
+                        packetType = DNS_QUERY_PACKET
+                    else:
+                        packetType = DNS_ANSWER_PACKET
+
+                # DHCP Packet
+                elif DHCP in packet:
+                    packetType = DNS_QUERY_PACKET
+                
+                # HSRP Packet
+                elif HSRP in packet:
+                    packetType = HSRP_PACKET
+                
+                # LLMNR Packet
+                elif LLMNRQuery in packet or LLMNRResponse in packet:
+                    if LLMNRQuery in packet:
+                        packetType = LLMNR_QUERY_PACKET
+                    else:
+                        packetType = LLMNR_RESPONSE_PACKET
+
+                # NetBIOS Packet
+                elif NBNSQueryRequest in packet or NBNSQueryResponse in packet:
+                    if NBNSQueryRequest in packet:
+                        packetType = NBNS_QUERY_PACKET
+                    else:
+                        packetType = NBNS_RESPONSE_PACKET
+
+                udpPacket = UDPPacket(udpData,packetType)
+                if not compareLayer4Session(udpSessions,udpData):
+                    udpPacket.addNodes()
+
+                udpSessions.append(udpData)   
+
             
             elif TCP in packet:
                 packetType = TCP_PACKET
@@ -134,16 +181,15 @@ def parse(pcap):
                 tcpPacket = TCPPacket(tcpData,TCP_PACKET)
                 if HTTP in packet:
                     if httpReq in str(packet[HTTP]).split()[0]:
-                        tcpPacket = TCPPacket(tcpData,HTTP_RESPONSE_PACKET)
-                        packetType = HTTP_RESPONSE_PACKET
+                        packetType = HTTP_RESPONSE_PACKET    
                     else:
-                        tcpPacket = TCPPacket(tcpData,HTTP_REQUEST_PACKET)
                         packetType = HTTP_REQUEST_PACKET
 
+                    tcpPacket = TCPPacket(tcpData,packetType)
+                        
+
                 if TCP_PACKET != packetType:
-                    print("DIFF ", packetType)
                     if compareLayer4Relation(tcpSessions,tcpData):
-                        print()
                         tcpPacket.updateRelation(packetType, TCP_PACKET)
                     
                 if not compareLayer4Session(tcpSessions,tcpData):
@@ -156,7 +202,7 @@ def parse(pcap):
                 icmpPacket = ICMPPacket(icmpData)
                 icmpPacket.addNodes()
 
-        # Layer 2
+        # Layer 2 or IPV6
         else:
             if ARP in packet:
                 arpData = getARPacketInfo(packet)
