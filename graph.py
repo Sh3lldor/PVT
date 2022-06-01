@@ -52,8 +52,8 @@ class Graph:
         def addOneSidedRelation(tx):
             asDest, asSrc = self.isNodeExsist(data)
             if not asDest and not asSrc:
-                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s {sourcePort:"%s",destinationPort:"%s"}]->(destination) return type(r) """ \
-                % (data["source"],data["destination"],data["type"],data["sourcePort"],data["destinationPort"])
+                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s {sourcePort:"%s",destinationPort:"%s",data:"%s"}]->(destination) return type(r) """ \
+                % (data["source"],data["destination"],data["type"],data["sourcePort"],data["destinationPort"],data["relationData"])
                 tx.run(q)
 
         def addTwoSidedRelation(tx):

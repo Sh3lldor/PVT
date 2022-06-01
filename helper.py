@@ -141,8 +141,9 @@ def parse(pcap):
     for packet in pkts:
         # Layer 3 and above
         if IP in packet:
+            relationData = dict() 
             if UDP in packet:
-                packetType = UDP_PACKET  
+                packetType = UDP_PACKET 
                 # UDP Packet
                 if DNS in packet:
                     if "Qry" in packet[DNS].mysummary():
@@ -206,7 +207,8 @@ def parse(pcap):
                         packetType = SNMP_VERION_GENERAL_PACKET
 
                 elif TFTP in packet:
-                    filename = packet[TFTP].filename
+                    relationData["filename"] = packet[TFTP].filename
+                    print(relationData)
                     packetType = TFTP_PACKET
                 
                 udpData = getLayer4PacketInfo(packet, UDP)
@@ -215,7 +217,7 @@ def parse(pcap):
 
                 if not compareLayer4Session(udpSessions,udpData,packetType) and \
                     not compareLayer4Relation(udpSessions,udpData):
-                        udpPacket.addNodes()
+                        udpPacket.addNodes(relationData)
                 
                 if UDP_PACKET != packetType:
                     if compareLayer4Relation(udpSessions,udpData):
@@ -242,7 +244,7 @@ def parse(pcap):
                         tcpPacket.updateRelation(packetType, TCP_PACKET)
                     
                 if not compareLayer4Session(tcpSessions,tcpData,packetType):
-                    tcpPacket.addNodes()
+                    tcpPacket.addNodes(relationData)
 
                 tcpSessions.append(tcpData)
 

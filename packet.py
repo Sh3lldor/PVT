@@ -75,8 +75,8 @@ class UDPPacket(Packet):
     def updateRelation(self, newRelation, oldRelation):
         update4thLayerNodesToGraph(self,"UpdateUDPRelation",oldRelation, newRelation)
     
-    def addNodes(self):
-        add4thLayerNodesToGraph(self,"AddUDPRelation",self.getLayer4())
+    def addNodes(self,relationData):
+        add4thLayerNodesToGraph(self,"AddUDPRelation",self.getLayer4(),relationData)
 
 
 class ICMPPacket(Packet):
@@ -103,7 +103,7 @@ class ARPPacket(Packet):
         add2ndLayerNodesToGraph(self,"AddARPRelation","ARP")
 
 
-def add4thLayerNodesToGraph(obj,query,type):
+def add4thLayerNodesToGraph(obj,query,type,relationData):
         sourceMac = obj.getSourceMac()
         destinationMac = obj.getDestinationMac()
         sourceIp = obj.getSourceIp()
@@ -128,7 +128,8 @@ def add4thLayerNodesToGraph(obj,query,type):
             "destination": destinationIp, 
             "sourcePort": sourcePort, 
             "destinationPort" : destinationPort,
-            "type": type
+            "type": type,
+            "relationData": relationData
             }
             
         graph.runQuery(query,data)
