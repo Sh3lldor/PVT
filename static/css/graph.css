@@ -94,6 +94,17 @@ body {
     padding: 20px;
 }
 
+.pcaps .toggle-pcap {
+    color: #ccd;
+    background-color: #999;
+    border: 1px solid #ccd;
+    transition-duration: 0.2s;
+}
+
+.pcaps .active {
+    border: 1px solid #3f6ad8;
+    background-color: #3f6ad8;
+}
 /*
 .query .table {
     box-shadow: 4px 4px 10px black;

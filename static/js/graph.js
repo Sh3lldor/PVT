@@ -127,3 +127,8 @@ $(".command").click(function() {
         draw(query = queryValue);
     }
 });
+
+$(".toggle-pcap").click(function() {
+    $(this).toggleClass("active");
+    // View pcap in graph or not.
+})
