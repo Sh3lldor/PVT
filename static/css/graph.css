@@ -32,6 +32,10 @@ body {
     z-index: 200;
 }
 
+.hidden {
+    display: none;
+}
+
 .modern-input {
     border-radius: 20px;
     background-color: rgb(67, 72, 82);
@@ -104,6 +108,20 @@ body {
 .pcaps .active {
     border: 1px solid #3f6ad8;
     background-color: #3f6ad8;
+}
+
+.pcaps .remove-pcap {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 7px 7px 2px;
+    margin-right: 7px;    
+    transition-duration: 0.2s;
+    border-radius: 5px;
+}
+
+.pcaps .remove-pcap:hover {
+    background-color: rgb(240, 58, 58);
+
 }
 
 #Graph {

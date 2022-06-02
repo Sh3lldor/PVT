@@ -216,12 +216,23 @@ $(".command").click(function() {
     }
 });
 
-$(".toggle-pcap").click(function() {
+$(".toggle-pcap").click(function(e) {
+    if (e.target !== this)
+    return;
+
     $(this).toggleClass("active");
     // TODO: View pcap in graph or not.
+})
+
+$(".remove-pcap").click(function() {
+    confirm("Remove pcap?");
 })
 
 $(".toggle-opt").click(function() {
     $(this).toggleClass("active");
     // TODO: View pcap in graph or not.
+})
+
+$(".import-btn").click(function() {
+    $("#upload-file").click();
 })
