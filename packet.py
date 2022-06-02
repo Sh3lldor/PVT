@@ -41,8 +41,8 @@ class TCPPacket(Packet):
     def getLayer4(self):
         return self.layer4
 
-    def addNodes(self):
-        add4thLayerNodesToGraph(self,"AddTCPRelation",self.getLayer4())
+    def addNodes(self,relationData):
+        add4thLayerNodesToGraph(self,"AddTCPRelation",self.getLayer4(), relationData)
     
     def updateRelation(self, newRelation, oldRelation):
         update4thLayerNodesToGraph(self,"UpdateTCPRelation",oldRelation, newRelation)

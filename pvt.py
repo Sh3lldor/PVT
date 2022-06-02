@@ -43,4 +43,3 @@ def startPVT(pcap="Test/t.pcapng", help=False, debug=False, prod=False,port=5000
 
 if __name__ == '__main__':
     Fire(startPVT) 
-    app.start()

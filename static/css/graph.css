@@ -25,6 +25,13 @@ body {
     top: 25px;
 }
 
+.down {
+    position: fixed;
+    bottom: 0;
+    left: 400px;
+    z-index: 200;
+}
+
 .modern-input {
     border-radius: 20px;
     background-color: rgb(67, 72, 82);
@@ -49,7 +56,7 @@ body {
     background-color: #3f6ad8;
 }
 
-.stabilize-graph {
+.stabilize-btn {
     background-color: #3f6ad8;
 }
 
@@ -75,6 +82,16 @@ body {
 
 .floating-btn>.fa-trash {
     color: #eef;
+}
+
+.pcaps {
+    padding: 40px 20px;
+}
+
+.pcaps .import-btn {
+    background-color: #06a821;
+    color: #ccd;
+    padding: 20px;
 }
 
 /*

@@ -1,11 +1,65 @@
 var viz;
+
+function draw(query = "MATCH relations=()-->() RETURN relations") {
+    var config = {
+        container_id: "Graph",
+        server_url: "bolt://localhost:7687",
+        server_user: "neo4j",
+        server_password: "test",
+        labels: {
+            "endpoints": {
+                caption: "ip",
+                "font": {
+                    "size": 35,
+                    "color": "black",
+                    "face":'arial'
+                }
+            }
+        },
+        relationships: {
+            "TCP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "UDP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "ICMP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "ARP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "HTTP_REQUEST": {
+                caption: true,
+                tickness: "weight"
+            },
+
+            [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
+                "thickness": "defaultThicknessProperty",
+                "caption": "defaultCaption"
+            }
+        },
+        initial_cypher: "MATCH (n)-[r:INTERACTS]->(m) RETURN n,r,m",
+
+        initial_cypher: query,
+        arrows: true,
+        hierarchical_layout: true,
+        hierarchical_sort_method: "directed",
+        
+    };
+
+    viz = new NeoVis.default(config);
+    viz.render();
+}
 var timeout;
 
 $(document).ready(function() {
-    draw();
-});
 
-$(document).ready(function() {
+    draw();
 
     this.addEventListener("keyup", function(event) {
         // Number 13 is the "Enter" key on the keyboard
@@ -73,59 +127,3 @@ $(".command").click(function() {
         draw(query = queryValue);
     }
 });
-
-function draw(query = "MATCH relations=()-->() RETURN relations") {
-    var config = {
-        container_id: "Graph",
-        server_url: "bolt://localhost:7687",
-        server_user: "neo4j",
-        server_password: "pass",
-        labels: {
-            "endpoints": {
-                caption: "ip",
-                "font": {
-                    "size": 35,
-                    "color": "black",
-                    "face":'arial'
-                }
-            }
-        },
-        relationships: {
-            "TCP": {
-                caption: true,
-                tickness: "weight"
-            },
-            "UDP": {
-                caption: true,
-                tickness: "weight"
-            },
-            "ICMP": {
-                caption: true,
-                tickness: "weight"
-            },
-            "ARP": {
-                caption: true,
-                tickness: "weight"
-            },
-            "HTTP_REQUEST": {
-                caption: true,
-                tickness: "weight"
-            },
-
-            [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
-                "thickness": "defaultThicknessProperty",
-                "caption": "defaultCaption"
-            }
-        },
-        initial_cypher: "MATCH (n)-[r:INTERACTS]->(m) RETURN n,r,m",
-
-        initial_cypher: query,
-        arrows: true,
-        hierarchical_layout: true,
-        hierarchical_sort_method: "directed",
-        
-    };
-
-    viz = new NeoVis.default(config);
-    viz.render();
-}
