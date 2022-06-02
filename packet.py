@@ -48,7 +48,6 @@ class TCPPacket(Packet):
         update4thLayerNodesToGraph(self,"UpdateTCPRelation",oldRelation, newRelation)
 
 
-
 class UDPPacket(Packet):
     def __init__(self,udpData,layer4):
         super().__init__(udpData['sourceMac'], udpData['destinationMac'])
@@ -73,8 +72,11 @@ class UDPPacket(Packet):
     def getLayer4(self):
         return self.layer4
     
-    def addNodes(self):
-        add4thLayerNodesToGraph(self,"AddUDPRelation",self.getLayer4())
+    def updateRelation(self, newRelation, oldRelation):
+        update4thLayerNodesToGraph(self,"UpdateUDPRelation",oldRelation, newRelation)
+    
+    def addNodes(self,relationData):
+        add4thLayerNodesToGraph(self,"AddUDPRelation",self.getLayer4(),relationData)
 
 
 class ICMPPacket(Packet):
@@ -101,7 +103,7 @@ class ARPPacket(Packet):
         add2ndLayerNodesToGraph(self,"AddARPRelation","ARP")
 
 
-def add4thLayerNodesToGraph(obj,query,type):
+def add4thLayerNodesToGraph(obj,query,type,relationData):
         sourceMac = obj.getSourceMac()
         destinationMac = obj.getDestinationMac()
         sourceIp = obj.getSourceIp()
@@ -126,11 +128,11 @@ def add4thLayerNodesToGraph(obj,query,type):
             "destination": destinationIp, 
             "sourcePort": sourcePort, 
             "destinationPort" : destinationPort,
-            "type": type
+            "type": type,
+            "relationData": relationData
             }
             
         graph.runQuery(query,data)
-
 
 def update4thLayerNodesToGraph(obj,query,oldRelation,newRelation):
         sourceIp = obj.getSourceIp()
@@ -170,7 +172,6 @@ def add3rdLayerNodesToGraph(obj,query,type):
             }
 
         graph.runQuery(query,data)
-
 
 def add2ndLayerNodesToGraph(obj,query,type):
         sourceMac = obj.getSourceMac()

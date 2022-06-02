@@ -52,8 +52,8 @@ class Graph:
         def addOneSidedRelation(tx):
             asDest, asSrc = self.isNodeExsist(data)
             if not asDest and not asSrc:
-                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s {sourcePort:"%s",destinationPort:"%s"}]->(destination) return type(r) """ \
-                % (data["source"],data["destination"],data["type"],data["sourcePort"],data["destinationPort"])
+                q = """ match (source:endpoints), (destination:endpoints) WHERE source.ip="%s" AND destination.ip="%s" MERGE (source)-[r:%s {sourcePort:"%s",destinationPort:"%s",data:"%s"}]->(destination) return type(r) """ \
+                % (data["source"],data["destination"],data["type"],data["sourcePort"],data["destinationPort"],data["relationData"])
                 tx.run(q)
 
         def addTwoSidedRelation(tx):
@@ -74,7 +74,7 @@ class Graph:
             tx.run(q)
 
         def updateRelation(tx):
-            q = """ match (source:endpoints {ip:"%s"})-[r:%s]->(destination:endpoints {ip:"%s"}) CREATE (source)-[r2:%s]->(destination) SET r2 = r WITH r DELETE r""" \
+            q = """ match (source:endpoints {ip:"%s"})-[r:%s]->(destination:endpoints {ip:"%s"}) MERGE (source)-[r2:%s]->(destination) SET r2 = r WITH r DELETE r""" \
             % (data["source"],data["type"],data["destination"],data["newType"])
             tx.run(q)
         
@@ -95,4 +95,7 @@ class Graph:
             self.executeWriteQuery(addLayer2Relation)
         
         elif action == "UpdateTCPRelation":
+            self.executeWriteQuery(updateRelation)
+        
+        elif action == "UpdateUDPRelation":
             self.executeWriteQuery(updateRelation)
