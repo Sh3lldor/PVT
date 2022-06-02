@@ -98,12 +98,14 @@ function hideAll() {
     $(".up").animate({ "top": '-95px' });
     $(".right").animate({ "right": '-200px' });
     $(".left").animate({ "left": '-1000px' });
+    $(".down").animate({ "bottom": '-200px' });
 }
 
 function showAll() {
     $(".up").animate({ "top": '0px' });
     $(".right").animate({ "right": '0px' });
     $(".left").animate({ "left": '0px' });
+    $(".down").animate({ "bottom": '0px' });
 }
 
 
@@ -130,5 +132,5 @@ $(".command").click(function() {
 
 $(".toggle-pcap").click(function() {
     $(this).toggleClass("active");
-    // View pcap in graph or not.
+    // TODO: View pcap in graph or not.
 })
