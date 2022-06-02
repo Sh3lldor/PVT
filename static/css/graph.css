@@ -7,7 +7,7 @@ body {
     left: 50%;
     top: 0px;
     padding-top: 40px;
-    z-index: 200;
+    z-index: 500;
 }
 
 .right {
@@ -28,7 +28,7 @@ body {
 .down {
     position: fixed;
     bottom: 0;
-    left: 400px;
+    left: 550px;
     z-index: 200;
 }
 
@@ -105,31 +105,6 @@ body {
     border: 1px solid #3f6ad8;
     background-color: #3f6ad8;
 }
-/*
-.query .table {
-    box-shadow: 4px 4px 10px black;
-    border-radius: 15px;
-    width: 700px;
-    background-color: #31353D;
-    border-color: transparent;
-    border-radius: 10px;
-}
-
-.query .table thead tr th {
-    border-color: transparent;
-    border-radius: 10px;
-}
-
-.query .table tbody tr td {
-    cursor: pointer;
-}
-
-.table-dark td,
-.table-dark th,
-.table-dark thead th {
-    border-color: #31353D;
-    text-align: center;
-}*/
 
 #Graph {
     height: 100vh;
@@ -141,8 +116,8 @@ body {
     display: none;
 }
 
-.commands-section {
-    width: 700px;
+.left-section {
+    width: 500px;
     height: auto;
     background-color: rgb(67, 72, 82);
     padding: 20px 30px;
@@ -150,7 +125,7 @@ body {
     box-shadow: 0px 0px 15px black;
 }
 
-.commands-section .title {
+.left-section .title {
     font-size: 32px;
     font-weight: 600;
     color: #ccd;
@@ -160,11 +135,11 @@ body {
     text-shadow: 1px 1px 1px black;
 }
 
-.commands-section .commands {
+.left-section .commands {
     display: grid;
 }
 
-.commands-section .command {
+.left-section .command {
     color: #ccd;
     padding: 5px 15px;
     font-size: 20px;
@@ -176,6 +151,29 @@ body {
     text-decoration: none;
 }
 
-.commands-section .command:hover {
+.left-section .command:hover {
     filter: brightness(110%);
+}
+
+.left-section .options .opt {
+    display: inline-block;
+    color: #ccd;
+    padding: 5px 10px;
+    font-size: 20px;
+    background-color: rgb(49, 53, 61);
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px black;
+    text-decoration: none;
+    transition-duration: 0.2s;
+}
+
+.left-section .options .opt:hover {
+    filter: brightness(110%);
+}
+
+.left-section .options .active {
+    border: 1px solid #a8adb9;
+    background-color: #3f6ad8;
+
 }

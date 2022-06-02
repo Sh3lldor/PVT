@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="left">
-            <div class="table commands-section">
+            <div class="table left-section">
                 <div class="title">Commands</div>
                 <div class="commands">
                     <a href="#" class="command" title="MATCH (user:users) RETURN user">
@@ -43,10 +43,39 @@
                         </a>
                     <a href="#" class="command" title="MATCH (user:users) where user.password='{}' RETURN user">
                             Show all users with X password
+                    </a>
+                </div>
+            </div>   
+            <div class="left-section">
+                <div class="title">Protocols</div>
+                <div class="options">
+                    <a href="#" class="opt toggle-opt active" title="">
+                            tcp
                         </a>
-                    </div>
-                </div>    
-            </div>
+                    <a href="#" class="opt toggle-opt active" title="">
+                            telnet
+                        </a>
+                    <a href="#" class="opt toggle-opt" title="">
+                            udp
+                        </a>
+                    <a href="#" class="opt toggle-opt" title="">
+                            ssh
+                    </a>
+                    <a href="#" class="opt toggle-opt" title="">
+                            llmnr
+                    </a>
+                    <a href="#" class="opt toggle-opt" title="">
+                            arp
+                    </a>
+                    <a href="#" class="opt toggle-opt" title="">
+                            icmp
+                    </a>
+                    <a href="#" class="opt toggle-opt" title="">
+                            http
+                    </a>
+                </div>
+            </div>  
+        </div>
             <div class="down">
                 <div class="pcaps">
                     <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">

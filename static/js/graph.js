@@ -220,3 +220,8 @@ $(".toggle-pcap").click(function() {
     $(this).toggleClass("active");
     // TODO: View pcap in graph or not.
 })
+
+$(".toggle-opt").click(function() {
+    $(this).toggleClass("active");
+    // TODO: View pcap in graph or not.
+})
