@@ -1,67 +1,70 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
-        <!--link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/all.css') }}"-->
-        <link rel="stylesheet" href="{{ url_for('static', filename='assets/fontawesome-free-6.1.1-web/css/all.css') }}">
-    </head>
-    <body>
-        <div class="query">
-            <div class="up">
-                <input class="modern-input" id="query" name="query">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
+    <!--link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/all.css') }}"-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fontawesome-free-6.1.1-web/css/all.css') }}">
+</head>
+
+<body>
+    <div class="query">
+        <div class="up">
+            <input class="modern-input" id="query" name="query">
+        </div>
+        <div class="right">
+            <div class="floating-btns">
+                <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-stop"></i> Stabilize
+                </a>
+                <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-stop"></i> Stabilize
+                </a>
+                <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-stop"></i> Stabilize
+                </a>
+                <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-stop"></i> Stabilize
+                </a>
             </div>
-            <div class="right">
-                <div class="floating-btns">
-                    <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                        <i class="fas fa-stop"></i> Stabilize
-                    </a>
-                    <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                        <i class="fas fa-stop"></i> Stabilize
-                    </a>
-                    <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                        <i class="fas fa-stop"></i> Stabilize
-                    </a>
-                    <a class="stabilize-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                        <i class="fas fa-stop"></i> Stabilize
-                    </a>
-                </div>
-            </div>
-            <div class="left">
-                <div class="table commands-section">
-                    <div class="title">Commands</div>
-                    <div class="commands">
-                        <a href="#" class="command" title="MATCH (user:users) RETURN user">
+        </div>
+        <div class="left">
+            <div class="table commands-section">
+                <div class="title">Commands</div>
+                <div class="commands">
+                    <a href="#" class="command" title="MATCH (user:users) RETURN user">
                             Show all users
                         </a>
-                        <a href="#" class="command" title="MATCH (server:servers) RETURN server">
+                    <a href="#" class="command" title="MATCH (server:servers) RETURN server">
                             Show all servers
                         </a>
-                        <a href="#" class="command" title="MATCH relations=()-->() RETURN relations">
+                    <a href="#" class="command" title="MATCH relations=()-->() RETURN relations">
                             Show all relationships
                         </a>
-                        <a href="#" class="command" title="MATCH (user:users) where user.password='{}' RETURN user">
+                    <a href="#" class="command" title="MATCH (user:users) where user.password='{}' RETURN user">
                             Show all users with X password
                         </a>
-                    </div>
-                </div>    
-            </div>
-            <div class="down">
-                <div class="pcaps">
-                    <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                        <i class="fas fa-upload"></i>
-                    </a>
                 </div>
             </div>
         </div>
-        <div class="notifications">
-            <div class="noti">
-
+        <div class="down">
+            <div class="pcaps">
+                <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-upload"></i>
+                </a>
             </div>
         </div>
+    </div>
+    <div class="notifications">
+        <div class="noti">
 
-        <div id="Graph"></div>
-        <script src="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/js/jquery-3.6.0.min.js') }}"></script>    
-        <script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
-        <script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>
-    </body>
+        </div>
+    </div>
+
+    <div id="Graph"></div>
+    <script src="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
+    <script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>
+</body>
+
 </html>
