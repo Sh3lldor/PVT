@@ -3,6 +3,7 @@ from fire import Fire
 from flask import Flask, request, render_template
 from uuid import uuid4
 import sys
+import os
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = str(uuid4())  # Nice
@@ -25,15 +26,16 @@ def showHelpMenu():
     print(description)
 
 
-def startPVT(pcap="Test/t.pcapng", help=False, debug=False, prod=False,port=5000):
+def startPVT(help=False, debug=False, web=False, dev=False,port=5000):
     if help:
         showHelpMenu()
         sys.exit(0)
 
-    if pcap:
-        helper.parse(pcap)
+    if dev:
+        for pcap in os.listdir("Test"):
+            helper.parse(f"Test/{pcap}")
 
-    if prod:
+    if web:
         if debug:
             app.run(debug=True, host='0.0.0.0', port=port)
         else:

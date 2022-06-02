@@ -9,10 +9,11 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
         labels: {
             "endpoints": {
                 caption: "ip",
+                "color": "#ffffff",
                 "font": {
-                    "size": 35,
+                    "size": 10,
                     "color": "black",
-                    "face":'arial'
+                    "face": 'arial'
                 }
             }
         },
@@ -37,6 +38,82 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
                 caption: true,
                 tickness: "weight"
             },
+            "HTTP_RESPONSE": {
+                caption: true,
+                tickness: "weight"
+            },
+            "DNS_QUERY": {
+                caption: true,
+                tickness: "weight"
+            },
+            "DNS_ANSWER": {
+                caption: true,
+                tickness: "weight"
+            },
+            "DHCP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "HSRP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "LLMNR_Query": {
+                caption: true,
+                tickness: "weight"
+            },
+            "LLMNR_Response": {
+                caption: true,
+                tickness: "weight"
+            },
+            "NBNS_Query": {
+                caption: true,
+                tickness: "weight"
+            },
+            "NBNS_Response": {
+                caption: true,
+                tickness: "weight"
+            },
+            "NTP_Symmetric_Active": {
+                caption: true,
+                tickness: "weight"
+            },
+            "NTP_SERVER": {
+                caption: true,
+                tickness: "weight"
+            },
+            "RADIUS_Request": {
+                caption: true,
+                tickness: "weight"
+            },
+            "RADIUS_Challenge": {
+                caption: true,
+                tickness: "weight"
+            },
+            "RIP_Request": {
+                caption: true,
+                tickness: "weight"
+            },
+            "RIP_Response": {
+                caption: true,
+                tickness: "weight"
+            },
+            "SNMP_v1": {
+                caption: true,
+                tickness: "weight"
+            },
+            "SNMP_v2": {
+                caption: true,
+                tickness: "weight"
+            },
+            "SNMP": {
+                caption: true,
+                tickness: "weight"
+            },
+            "TFTP": {
+                caption: true,
+                tickness: "weight"
+            },
 
             [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
                 "thickness": "defaultThicknessProperty",
@@ -49,11 +126,20 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
         arrows: true,
         hierarchical_layout: true,
         hierarchical_sort_method: "directed",
-        
+
     };
 
     viz = new NeoVis.default(config);
     viz.render();
+    viz.registerOnEvent("completed", (e) => {
+        viz["_network"].on("click", (event) => {
+            if (event.nodes[0]) {
+                console.log(viz["_nodes"][event.nodes[0]])
+            } else if (event.edges[0]) {
+                console.log(viz["_edges"][event.edges[0]])
+            }
+        });
+    });
 }
 var timeout;
 

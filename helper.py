@@ -1,4 +1,3 @@
-from re import S
 import scapy.all
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket
 from scapy.layers.l2 import ARP
@@ -16,7 +15,7 @@ from scapy.layers.smb import SMBNetlogon_Protocol_Response_Header          # TCP
 from scapy.layers.smb2 import SMB2_Header                                  # TCP
 from scapy.layers.snmp import SNMP                                         # TCP
 from scapy.layers.tftp import TFTP                                         # TCP
-
+import scapy.layers.tls
 
 # Packets
 HTTP_REQUEST_PACKET = "HTTP_REQUEST"

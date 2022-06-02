@@ -6,7 +6,7 @@ body {
     position: fixed;
     left: 50%;
     top: 0px;
-    padding-top:40px;
+    padding-top: 40px;
     z-index: 200;
 }
 
@@ -148,7 +148,6 @@ body {
     padding: 20px 30px;
     border-radius: 20px;
     box-shadow: 0px 0px 15px black;
-
 }
 
 .commands-section .title {
