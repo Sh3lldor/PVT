@@ -8,7 +8,7 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = str(uuid4())  # Nice
 
 
-@app.route('/graph', methods=['GET'])
+@app.route('/', methods=['GET'])
 def graph():
     return render_template('index.html')
 
