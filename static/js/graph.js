@@ -226,6 +226,9 @@ $(".toggle-pcap").click(function(e) {
 
 $(".remove-pcap").click(function() {
     confirm("Remove pcap?");
+    var pcap = $(this).parent().text();
+    
+    // TODO: Remove pcap
 })
 
 $(".toggle-opt").click(function() {
