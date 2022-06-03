@@ -117,7 +117,7 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
 
             [NeoVis.NEOVIS_DEFAULT_CONFIG]: {
                 "thickness": "defaultThicknessProperty",
-                "caption": "defaultCaption"
+                "caption": true
             }
         },
         initial_cypher: "MATCH (n)-[r:INTERACTS]->(m) RETURN n,r,m",
@@ -207,8 +207,11 @@ $(".command").click(function() {
     queryValue = $(this).attr("title");
     if (queryValue.includes("{}")) {
 
-        value = prompt("Value:");
+        value = prompt("Source IP:");
         queryValue = queryValue.replace("{}", value)
+        value = prompt("Destination IP:");
+        queryValue = queryValue.replace("{x}", value)
+
         draw(query = queryValue);
 
     } else {
@@ -218,7 +221,7 @@ $(".command").click(function() {
 
 $(".toggle-pcap").click(function(e) {
     if (e.target !== this)
-    return;
+        return;
 
     $(this).toggleClass("active");
     // TODO: View pcap in graph or not.
@@ -227,7 +230,7 @@ $(".toggle-pcap").click(function(e) {
 $(".remove-pcap").click(function() {
     confirm("Remove pcap?");
     var pcap = $(this).parent().text();
-    
+
     // TODO: Remove pcap
 })
 

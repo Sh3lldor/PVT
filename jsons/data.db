@@ -1,0 +1,1 @@
+{"TCP": ["HTTP", "HTTPS", "XMPPCLIENT", "NETBIOSSSN", "MICROSOFTDS", "HTTP_REQUEST", "HTTP_RESPONSE", "TCP"], "UDP": ["NETBIOSDGM", "HTTPS", "SNMP", "DNS_QUERY", "DNS_ANSWER", "HSRP", "LLMNR_Query", "LLMNR_Response", "UDP", "NBNS_Query", "NBNS_Response", "NTP_Symmetric_Active", "NTP_SERVER", "RADIUS_Request", "RADIUS_Challenge", "RIP_Request", "RIP_Response", "SNMP_v2", "TFTP"]}

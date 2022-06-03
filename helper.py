@@ -1,4 +1,7 @@
 import scapy.all
+import socket
+from re import sub
+import json
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket
 from scapy.layers.l2 import ARP
 from scapy.layers.dns import DNS
@@ -15,7 +18,6 @@ from scapy.layers.smb import SMBNetlogon_Protocol_Response_Header          # TCP
 from scapy.layers.smb2 import SMB2_Header                                  # TCP
 from scapy.layers.snmp import SNMP                                         # TCP
 from scapy.layers.tftp import TFTP                                         # TCP
-import scapy.layers.tls
 
 # Packets
 HTTP_REQUEST_PACKET = "HTTP_REQUEST"
@@ -49,10 +51,14 @@ RADIUS_CHALLENGE_CODE     = 11
 RIP_REQUEST_CODE          = 1
 RIP_RESPONSE_CODE         = 2
 
+# Dirs
+DB = "jsons/data.db"
+
 
 tcpSessions = []
 udpSessions = []
 httpReq = "HTTP"
+knownPorts = [22,443]
 
 def getLayer4PacketInfo(packet,packetType):
     srcIP = packet[IP].src
@@ -133,6 +139,29 @@ def compareLayer4Relation(sessions,data):
     
     return False
 
+def getServiceName(srcPort,dstPort,layer4Type):
+    try:
+        srcPortService = socket.getservbyport(srcPort)
+        service = sub(r'[^a-zA-Z]', '', srcPortService).upper()
+        return service
+
+    except Exception as srcPortNotFound:
+        try:
+            dstPortService = socket.getservbyport(dstPort)
+            service = sub(r'[^a-zA-Z]', '', dstPortService).upper()
+            return service
+
+        except Exception as dstPortNotFound:
+            return layer4Type
+
+
+def updateProtocols(layer4Type,service):
+    with open(DB) as db:
+        data = json.load(db)
+        data[layer4Type].append(service) if service not in data[layer4Type] else data[layer4Type]
+    with open(DB, 'w') as db:
+        json.dump(data, db) 
+
 
 def parse(pcap):
     pkts = scapy.all.rdpcap(pcap)
@@ -207,9 +236,14 @@ def parse(pcap):
 
                 elif TFTP in packet:
                     relationData["filename"] = packet[TFTP].filename
-                    print(relationData)
                     packetType = TFTP_PACKET
+
+                else:
+                    packetType = getServiceName(int(packet[UDP].sport), int(packet[UDP].dport), UDP_PACKET)
                 
+                
+                updateProtocols(UDP_PACKET,packetType)
+
                 udpData = getLayer4PacketInfo(packet, UDP)
                 udpData["type"] = packetType
                 udpPacket = UDPPacket(udpData,packetType)
@@ -232,8 +266,11 @@ def parse(pcap):
                         packetType = HTTP_RESPONSE_PACKET    
                     else:
                         packetType = HTTP_REQUEST_PACKET
-                
 
+                else:
+                    packetType = getServiceName(int(packet[TCP].sport), int(packet[TCP].dport), TCP_PACKET)
+                
+                updateProtocols(TCP_PACKET,packetType)
                 tcpData = getLayer4PacketInfo(packet, TCP)
                 tcpData["type"] = packetType
                 tcpPacket = TCPPacket(tcpData,packetType)

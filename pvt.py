@@ -4,14 +4,20 @@ from flask import Flask, request, render_template
 from uuid import uuid4
 import sys
 import os
+import json
 
 app = Flask(__name__, template_folder="templates")
-app.secret_key = str(uuid4())  # Nice
+app.secret_key = str(uuid4())
 
+
+# Dirs
+DB = "jsons/data.db"
 
 @app.route('/', methods=['GET'])
 def graph():
-    return render_template('index.html')
+    with open(DB) as db:
+        newProtocols = json.load(db)
+    return render_template('index.html',protocols=newProtocols)
 
 
 

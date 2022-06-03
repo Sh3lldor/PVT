@@ -32,76 +32,56 @@
             <div class="table left-section">
                 <div class="title">Commands</div>
                 <div class="commands">
-                    <a href="#" class="command" title="MATCH (user:users) RETURN user">
-                            Show all users
+                    <a href="#" class="command" title="MATCH (endpoint:endpoints) RETURN endpoint">
+                            Show all Endpoints
                         </a>
-                    <a href="#" class="command" title="MATCH (server:servers) RETURN server">
-                            Show all servers
+                    <a href="#" class="command" title="MATCH relations=(source:endpoints)-[]->(destination:endpoints) where source.ip='{}' AND destination.ip='{x}' RETURN relations">
+                            Show spesific Address
                         </a>
                     <a href="#" class="command" title="MATCH relations=()-->() RETURN relations">
                             Show all relationships
                         </a>
-                    <a href="#" class="command" title="MATCH (user:users) where user.password='{}' RETURN user">
-                            Show all users with X password
-                    </a>
                 </div>
-            </div>   
+            </div>
             <div class="left-section">
                 <div class="title">Protocols</div>
                 <div class="options">
-                    <a href="#" class="opt toggle-opt active" title="">
-                            tcp
-                        </a>
-                    <a href="#" class="opt toggle-opt active" title="">
-                            telnet
-                        </a>
+                    {% for protocol in protocols["TCP"] %}
                     <a href="#" class="opt toggle-opt" title="">
-                            udp
-                        </a>
+                                {{ protocol }}
+                        </a> {% endfor %} {% for protocol in protocols["UDP"] %}
                     <a href="#" class="opt toggle-opt" title="">
-                            ssh
-                    </a>
-                    <a href="#" class="opt toggle-opt" title="">
-                            llmnr
-                    </a>
-                    <a href="#" class="opt toggle-opt" title="">
-                            arp
-                    </a>
-                    <a href="#" class="opt toggle-opt" title="">
-                            icmp
-                    </a>
-                    <a href="#" class="opt toggle-opt" title="">
-                            http
-                    </a>
-                </div>
-            </div>  
-        </div>
-            <div class="down">
-                <div class="pcaps">
-                    <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                        <i class="fas fa-upload"></i></a>
-                    <a href="#" class="floating-btn toggle-pcap active"><i class="fas fa-xmark remove-pcap"></i>baba.pcapng<input type="hidden" value="pcap-info>"></a>
-                    <a href="#" class="floating-btn toggle-pcap"><i class="fas fa-xmark remove-pcap"></i>ganush.pcapng<input type="hidden" value="pcap-info>"></a>
+                                    {{ protocol }}
+                            </a> {% endfor %}
                 </div>
             </div>
         </div>
         <div class="down">
             <div class="pcaps">
                 <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                    <i class="fas fa-upload"></i>
-                </a>
-                <div class="hidden">
-                    <input type="file" id="upload-file" onchange="alert(1)">
-                </div>
+                    <i class="fas fa-upload"></i></a>
+                <!--<a href="#" class="floating-btn toggle-pcap active"><i class="fas fa-xmark remove-pcap"></i>baba.pcapng<input type="hidden" value="pcap-info>"></a>
+                <a href="#" class="floating-btn toggle-pcap"><i class="fas fa-xmark remove-pcap"></i>ganush.pcapng<input type="hidden" value="pcap-info>"></a> -->
             </div>
         </div>
+    </div>
+    <div class="down">
+        <div class="pcaps">
+            <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                <i class="fas fa-upload"></i>
+            </a>
+            <div class="hidden">
+                <input type="file" id="upload-file" onchange="alert(1)">
+            </div>
+        </div>
+    </div>
     </div>
     <div class="notifications">
         <div class="noti">
 
         </div>
     </div>
-    
+
     <div id="Graph"></div>
     <script src="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
