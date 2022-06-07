@@ -194,12 +194,7 @@ function showAll() {
     $(".down").animate({ "bottom": '0px' });
 }
 
-
-$(".stabilize-graph").click(function() {
-    //viz.();
-})
-
-$(".stabilize-graph").click(function() {
+$(".stabilize-btn").click(function() {
     viz.stabilize();
 })
 
