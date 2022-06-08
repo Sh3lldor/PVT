@@ -1,1 +1,0 @@
-{"TCP": ["HTTP", "HTTP_REQUEST", "HTTP_RESPONSE"], "UDP": ["DNS_QUERY", "DNS_ANSWER", "NETBIOSDGM", "NBNS_Query", "NTP_Symmetric_Active", "NTP_SERVER"]}
