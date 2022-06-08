@@ -16,7 +16,8 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
                     "size": 10,
                     "color": "black",
                     "face": 'arial'
-                }
+                },
+                "image": "static\\pics\\server.png"
             }
         },
         relationships: {
@@ -244,7 +245,6 @@ $(".opt.toggle-opt").click(function() {
     var protocol = $(this).attr("title");
     var index = matchQuery.indexOf("]")
     if ($(this).hasClass("active")) { // Filter turned on
-        console.log("ON")
         if (index == initialIndex) {
             matchQuery = matchQuery.substring(0, index) + protocol + matchQuery.substring(index)
         } else {
@@ -252,7 +252,6 @@ $(".opt.toggle-opt").click(function() {
         }
         draw(query = matchQuery)
     } else { // Filter turned off
-        console.log("OFF")
         if (matchQuery.includes("|" + protocol)) {
             matchQuery = matchQuery.replace("|" + protocol, "")
             draw(query = matchQuery)
@@ -264,5 +263,4 @@ $(".opt.toggle-opt").click(function() {
             draw()
         }
     }
-    console.log(matchQuery)
 })
