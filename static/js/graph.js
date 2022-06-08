@@ -238,6 +238,7 @@ $(".toggle-opt").click(function() {
 })
 
 $(".import-btn").click(function() {
+    load();
     $("#upload-file").click();
 })
 
@@ -264,3 +265,15 @@ $(".opt.toggle-opt").click(function() {
         }
     }
 })
+
+function load() {
+    $(".loader").show();
+    $(".query").addClass("darken");
+    $("#Graph").addClass("darken");
+}
+
+function stop_load() {
+    $(".loader").hide();
+    $(".query").removeClass("darken");
+    $("#Graph").removeClass("darken");
+}

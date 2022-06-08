@@ -36,6 +36,10 @@ body {
     display: none;
 }
 
+.darken {
+    filter: brightness(60%);
+}
+
 .modern-input {
     border-radius: 20px;
     background-color: rgb(67, 72, 82);
@@ -192,4 +196,19 @@ body {
 .left-section .options .active {
     border: 1px solid #a8adb9;
     background-color: #3f6ad8;
+}
+
+.loader {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    font-size: 32px;
+    text-align: center;
+    display: none;
+}
+
+.loader .gif {
+    font-size: 62px;
 }
