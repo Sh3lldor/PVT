@@ -2,7 +2,9 @@ import scapy.all
 import socket
 from re import sub
 import json
-from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket
+from os import path
+from werkzeug.utils import secure_filename
+from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket, resetDB
 from scapy.layers.l2 import ARP
 from scapy.layers.dns import DNS
 from scapy.layers.inet import TCP, UDP, ICMP, IP
@@ -53,6 +55,8 @@ RIP_RESPONSE_CODE         = 2
 
 # Dirs
 DB = "jsons/data.db"
+PCAPS = "pcaps/"
+initJson = json.loads('{"TCP":[],"UDP":[]}')
 
 
 tcpSessions = []
@@ -295,3 +299,17 @@ def parse(pcap):
                 arpData = getLayer2PacketInfo(packet)
                 arpPacket = ARPPacket(arpData)
                 arpPacket.addNodes()
+
+
+def saveFile(pcap):
+    pcapName = secure_filename(pcap.filename)
+    fullPath = path.join(PCAPS,pcapName)
+    pcap.save(fullPath)
+    initDB()
+    resetDB()
+    return fullPath
+
+
+def initDB():
+    with open(DB, 'w') as db:
+        json.dump(initJson, db) 

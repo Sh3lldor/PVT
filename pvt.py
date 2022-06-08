@@ -11,14 +11,30 @@ app.secret_key = str(uuid4())
 
 
 # Dirs
+DB_FOLDER = "jsons/"
+PCAP_FOLDER = "pcaps/"
+
+# Files
 DB = "jsons/data.db"
+
 
 @app.route('/', methods=['GET'])
 def graph():
+    if not os.path.exists(DB):
+        helper.initDB()
+
     with open(DB) as db:
         newProtocols = json.load(db)
     return render_template('index.html',protocols=newProtocols)
 
+@app.route('/upload_pcap', methods=['POST'])
+def upload_pcap():
+    pcap = request.files.get("pcap")
+    fullPath = helper.saveFile(pcap)
+    helper.parse(fullPath)
+    with open(DB) as db:
+        newProtocols = json.load(db)
+    return render_template('index.html',protocols=newProtocols)
 
 
 def showHelpMenu():
@@ -50,4 +66,6 @@ def startPVT(help=False, debug=False, web=False, dev=False,port=5000):
 
 
 if __name__ == '__main__':
+    os.makedirs(DB_FOLDER, exist_ok=True)
+    os.makedirs(PCAP_FOLDER, exist_ok=True)
     Fire(startPVT) 

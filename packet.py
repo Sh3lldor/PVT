@@ -195,3 +195,5 @@ def add2ndLayerNodesToGraph(obj,query,type):
 
         graph.runQuery(query,data)
 
+def resetDB():
+    graph.clear()

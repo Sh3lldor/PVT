@@ -1,2 +1,4 @@
 Test/*
+pcaps/*
+jsons/*
 __pycache__/*

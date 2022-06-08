@@ -25,6 +25,14 @@ class Graph:
         with self.driver.session() as session:
             return session.read_transaction(func, obj)
     
+    def clear(self):
+        def clearDB(tx):
+            initQuery = """ match (n) detach delete n """
+            tx.run(initQuery)
+        with self.driver.session() as session:
+            session.write_transaction(clearDB)
+
+    
     def isNodeExsist(self,data):
         def getRelation(tx,d):
             dstQuery = """ MATCH  (source:endpoints), (destination:endpoints) where source.ip="%s" and destination.ip="%s" RETURN EXISTS( (source)-[:%s {destinationPort:"%s"}]-(destination) ) """ \

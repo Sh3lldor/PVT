@@ -1,4 +1,6 @@
 var viz;
+var matchQuery = "MATCH p=()-[r:]->() RETURN p"
+var initialIndex = 14;
 
 function draw(query = "MATCH relations=()-->() RETURN relations") {
     var config = {
@@ -236,4 +238,31 @@ $(".toggle-opt").click(function() {
 
 $(".import-btn").click(function() {
     $("#upload-file").click();
+})
+
+$(".opt.toggle-opt").click(function() {
+    var protocol = $(this).attr("title");
+    var index = matchQuery.indexOf("]")
+    if ($(this).hasClass("active")) { // Filter turned on
+        console.log("ON")
+        if (index == initialIndex) {
+            matchQuery = matchQuery.substring(0, index) + protocol + matchQuery.substring(index)
+        } else {
+            matchQuery = matchQuery.substring(0, index) + "|" + protocol + matchQuery.substring(index)
+        }
+        draw(query = matchQuery)
+    } else { // Filter turned off
+        console.log("OFF")
+        if (matchQuery.includes("|" + protocol)) {
+            matchQuery = matchQuery.replace("|" + protocol, "")
+            draw(query = matchQuery)
+        } else if (matchQuery.includes(":" + protocol + "|")) {
+            matchQuery = matchQuery.replace(protocol + "|", "")
+            draw(query = matchQuery)
+        } else if (matchQuery.includes(":" + protocol)) {
+            matchQuery = matchQuery.replace(protocol, "")
+            draw()
+        }
+    }
+    console.log(matchQuery)
 })

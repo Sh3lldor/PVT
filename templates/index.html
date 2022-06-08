@@ -38,32 +38,32 @@
                 <div class="title">Protocols</div>
                 <div class="options">
                     {% for protocol in protocols["TCP"] %}
-                    <a href="#" class="opt toggle-opt" title="">
+                    <a href="#" class="opt toggle-opt" title="{{ protocol }}">
                                 {{ protocol }}
                         </a> {% endfor %} {% for protocol in protocols["UDP"] %}
-                    <a href="#" class="opt toggle-opt" title="">
+                    <a href="#" class="opt toggle-opt" title="{{ protocol }}">
                                     {{ protocol }}
-                            </a> {% endfor %}
+                    </a> {% endfor %}
+                    <a href="#" class="opt toggle-opt" title="ARP">
+                            ARP
+                    </a>
+                    <a href="#" class="opt toggle-opt" title="ICMP">
+                            ICMP
+                    </a>
                 </div>
-            </div>
-        </div>
-        <div class="down">
-            <div class="pcaps">
-                <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                    <i class="fas fa-upload"></i></a>
-                <!--<a href="#" class="floating-btn toggle-pcap active"><i class="fas fa-xmark remove-pcap"></i>baba.pcapng<input type="hidden" value="pcap-info>"></a>
-                <a href="#" class="floating-btn toggle-pcap"><i class="fas fa-xmark remove-pcap"></i>ganush.pcapng<input type="hidden" value="pcap-info>"></a> -->
             </div>
         </div>
     </div>
     <div class="down">
         <div class="pcaps">
-            <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
-                <i class="fas fa-upload"></i>
-            </a>
-            <div class="hidden">
-                <input type="file" id="upload-file" onchange="alert(1)">
-            </div>
+            <form enctype="multipart/form-data" id="upload-pcap" method="POST" action="{{ url_for('upload_pcap') }}">
+                <a class="import-btn floating-btn" id="stabilize" href="#" title="Stabilize">
+                    <i class="fas fa-upload"></i>
+                </a>
+                <div class="hidden">
+                    <input type="file" name="pcap" id="upload-file" onchange='document.getElementById("upload-pcap").submit()'>
+                </div>
+            </form>
         </div>
     </div>
     </div>
