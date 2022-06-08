@@ -27,6 +27,7 @@ def graph():
         newProtocols = json.load(db)
     return render_template('index.html',protocols=newProtocols)
 
+
 @app.route('/upload_pcap', methods=['POST'])
 def upload_pcap():
     pcap = request.files.get("pcap")
@@ -44,6 +45,10 @@ def showHelpMenu():
 
     optional arguments:
     --pcap      PCAP path for visualization [Default: False].
+    --debug     Enable debug [Default: False]
+    --web       Start Web service [Default: False]
+    --dev       Load pcaps from Test directory [Default: False]
+    --port      Listening port for web service [Default: 5000]
     """
     print(description)
 
