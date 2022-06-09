@@ -134,6 +134,7 @@ def add4thLayerNodesToGraph(obj,query,type,relationData):
             
         graph.runQuery(query,data)
 
+
 def update4thLayerNodesToGraph(obj,query,oldRelation,newRelation):
         sourceIp = obj.getSourceIp()
         destinationIp = obj.getDestinationIp()
@@ -146,6 +147,7 @@ def update4thLayerNodesToGraph(obj,query,oldRelation,newRelation):
             }
             
         graph.runQuery(query,data)
+
 
 def add3rdLayerNodesToGraph(obj,query,type):
         sourceMac = obj.getSourceMac()
@@ -173,6 +175,7 @@ def add3rdLayerNodesToGraph(obj,query,type):
 
         graph.runQuery(query,data)
 
+
 def add2ndLayerNodesToGraph(obj,query,type):
         sourceMac = obj.getSourceMac()
         destinationMac = obj.getDestinationMac()
@@ -194,6 +197,7 @@ def add2ndLayerNodesToGraph(obj,query,type):
             }
 
         graph.runQuery(query,data)
+
 
 def resetDB():
     graph.clear()

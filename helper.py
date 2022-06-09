@@ -2,7 +2,8 @@ import scapy.all
 import socket
 from re import sub
 import json
-from os import path
+from os import path, remove
+import glob
 from werkzeug.utils import secure_filename
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket, resetDB
 from scapy.layers.l2 import ARP
@@ -58,11 +59,7 @@ DB = "jsons/data.db"
 PCAPS = "pcaps/"
 initJson = json.loads('{"TCP":[],"UDP":[]}')
 
-
-tcpSessions = []
-udpSessions = []
 httpReq = "HTTP"
-knownPorts = [22,443]
 
 def getLayer4PacketInfo(packet,packetType):
     srcIP = packet[IP].src
@@ -80,6 +77,7 @@ def getLayer4PacketInfo(packet,packetType):
      "destinationMac" : dstMac
     }
 
+
 def getLayer3PacketInfo(packet):
     srcIP = packet[IP].src
     dstIP = packet[IP].dst
@@ -92,6 +90,7 @@ def getLayer3PacketInfo(packet):
      "destinationMac" : dstMac
     }
 
+
 def getLayer2PacketInfo(packet):
     srcMac = packet['Ether'].src
     dstMac = packet['Ether'].dst
@@ -99,6 +98,7 @@ def getLayer2PacketInfo(packet):
      "sourceMac" : srcMac,
      "destinationMac" : dstMac
     }
+
 
 def compareLayer4Session(sessions,data, packetType):
     """
@@ -122,6 +122,7 @@ def compareLayer4Session(sessions,data, packetType):
     
     return False
 
+
 def compareLayer4Relation(sessions,data):
     """
     Checks if there is an active session in a lower layer,
@@ -142,6 +143,7 @@ def compareLayer4Relation(sessions,data):
                         return True
     
     return False
+
 
 def getServiceName(srcPort,dstPort,layer4Type):
     try:
@@ -169,6 +171,8 @@ def updateProtocols(layer4Type,service):
 
 def parse(pcap):
     pkts = scapy.all.rdpcap(pcap)
+    tcpSessions = []
+    udpSessions = []
 
     for packet in pkts:
         # Layer 3 and above
@@ -252,9 +256,8 @@ def parse(pcap):
                 udpData["type"] = packetType
                 udpPacket = UDPPacket(udpData,packetType)
 
-                if not compareLayer4Session(udpSessions,udpData,packetType) and \
-                    not compareLayer4Relation(udpSessions,udpData):
-                        udpPacket.addNodes(relationData)
+                if not compareLayer4Session(udpSessions,udpData,packetType):
+                    udpPacket.addNodes(relationData)
                 
                 if UDP_PACKET != packetType:
                     if compareLayer4Relation(udpSessions,udpData):
@@ -302,11 +305,11 @@ def parse(pcap):
 
 
 def saveFile(pcap):
+    initDB()
+    resetDB()
     pcapName = secure_filename(pcap.filename)
     fullPath = path.join(PCAPS,pcapName)
     pcap.save(fullPath)
-    initDB()
-    resetDB()
     return fullPath
 
 
