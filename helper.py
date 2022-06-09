@@ -100,7 +100,7 @@ def getLayer2PacketInfo(packet):
     }
 
 
-def compareLayer4Session(sessions,data, packetType):
+def compareLayer4Session(sessions,data,packetType):
     """
     If we got a packet the is the same but to the opposite side, skip.
        This will filter TCP/UDP sessions.
@@ -145,6 +145,12 @@ def compareLayer4Relation(sessions,data):
     return False
 
 
+def compareLayer2Relation(sessions,data):
+    for session in sessions:
+        if data["sourceMac"] == session["sourceMac"] and \
+            data["destinationMac"] == session["destinationMac"]:
+                return True
+
 def getServiceName(srcPort,dstPort,layer4Type):
     try:
         srcPortService = socket.getservbyport(srcPort)
@@ -173,6 +179,7 @@ def parse(pcap):
     pkts = scapy.all.rdpcap(pcap)
     tcpSessions = []
     udpSessions = []
+    arpConnections = []
 
     for packet in pkts:
         # Layer 3 and above
@@ -249,7 +256,6 @@ def parse(pcap):
                 else:
                     packetType = getServiceName(int(packet[UDP].sport), int(packet[UDP].dport), UDP_PACKET)
                 
-                
                 updateProtocols(UDP_PACKET,packetType)
 
                 udpData = getLayer4PacketInfo(packet, UDP)
@@ -301,7 +307,10 @@ def parse(pcap):
             if ARP in packet:
                 arpData = getLayer2PacketInfo(packet)
                 arpPacket = ARPPacket(arpData)
-                arpPacket.addNodes()
+                if not compareLayer2Relation(arpConnections,arpData):
+                    arpPacket.addNodes()
+                
+                arpConnections.append(arpData)
 
 
 def saveFile(pcap):
