@@ -38,16 +38,30 @@ class Graph:
 
             srcQuery = """ MATCH  (source:endpoints), (destination:endpoints) where source.ip="%s" and destination.ip="%s" RETURN EXISTS( (source)-[:%s {sourcePort:"%s"}]-(destination) ) """ \
             % (d["source"],d["destination"],d["type"],d["sourcePort"])
-
-            dstRes = tx.run(dstQuery).value()[0]
-            srcRes = tx.run(srcQuery).value()[0]
+            
+            resDst, resSrc = tx.run(dstQuery).value(), tx.run(srcQuery).value()
+            if resDst:
+                dstRes = resDst[0]
+            else:
+                dstRes = False
+                
+            if resSrc:
+                srcRes = resSrc[0]
+            else:
+                srcRes = False
 
             return dstRes,srcRes
 
         def getNode(tx,d):
             query = """ MATCH (endpoint:endpoints) where endpoint.mac="%s" RETURN EXISTS(endpoint.ip) """ \
                 % (d["mac"])
-            nodeExist = tx.run(query).value()[0]
+            
+            res = tx.run(query).value()
+            if res:
+                nodeExist = res[0]
+            else:
+                nodeExist = True
+
             return nodeExist
 
 

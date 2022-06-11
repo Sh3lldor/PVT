@@ -67,7 +67,7 @@ def startPVT(help=False, debug=False, web=False, dev=False,port=5000):
         if debug:
             socketio.run(app,debug=True, host='0.0.0.0', port=port)
         else:
-            app.run(debug=False, host='0.0.0.0', port=port)
+            socketio.run(app,debug=False, host='0.0.0.0', port=port)
 
 
 
