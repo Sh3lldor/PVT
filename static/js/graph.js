@@ -1,4 +1,6 @@
 var viz;
+var socket = io('http://localhost:5001/PVT');
+
 var matchQuery = "MATCH p=()-[r:]->() RETURN p"
 var initialIndex = 14;
 
@@ -277,3 +279,11 @@ function stop_load() {
     $(".query").removeClass("darken");
     $("#Graph").removeClass("darken");
 }
+
+function uploadPcap() {
+    document.getElementById("upload-pcap").submit()
+}
+
+socket.on("update", (percent) => {
+    alert(percent + "%")
+});

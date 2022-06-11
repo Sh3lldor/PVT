@@ -4,6 +4,7 @@ from re import sub
 import json
 from os import path, remove
 import glob
+from pvt import sendData
 from werkzeug.utils import secure_filename
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket, resetDB
 from scapy.layers.l2 import ARP
@@ -57,6 +58,8 @@ RIP_RESPONSE_CODE         = 2
 # Dirs
 DB = "jsons/data.db"
 PCAPS = "pcaps/"
+
+percent = 0
 initJson = json.loads('{"TCP":[],"UDP":[]}')
 
 httpReq = "HTTP"
@@ -180,8 +183,11 @@ def parse(pcap):
     tcpSessions = []
     udpSessions = []
     arpConnections = []
-
+    count = 1
     for packet in pkts:
+        global percent
+        percent = (count) / len(pkts)
+        sendData(percent * 100)
         # Layer 3 and above
         if IP in packet:
             relationData = dict() 
@@ -312,6 +318,8 @@ def parse(pcap):
                 
                 arpConnections.append(arpData)
 
+        count = count + 1        
+
 
 def saveFile(pcap):
     initDB()
@@ -324,4 +332,7 @@ def saveFile(pcap):
 
 def initDB():
     with open(DB, 'w') as db:
-        json.dump(initJson, db) 
+        json.dump(initJson, db)
+
+def getPercent():
+    return percent
