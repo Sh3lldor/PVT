@@ -1,0 +1,16 @@
+docs/
+src/
+core/
+bolt-connection/
+neo4j-driver-lite/
+testkit/
+testkit-backend/
+build/
+test/
+.gitignore
+esdoc.json
+gulpfile.babel.js
+runTests.sh
+runTests.ps1
+buildDependencies.sh
+node_modules/

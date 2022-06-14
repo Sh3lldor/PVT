@@ -74,7 +74,13 @@
 
         <div id="Graph"></div>
         <script src="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/js/jquery-3.6.0.min.js') }}"></script>
-        <script src="{{ url_for( 'static', filename='js/neovis.js' ) }} "></script>
+        <!--script src="{{ url_for( 'static', filename='js/neo/driver.js' ) }} " type="module"></script>
+        <script src="{{ url_for( 'static', filename='js/neo/vis-network.js' ) }} " type="module"></script-->
+        <!--script src="{{ url_for( 'static', filename='js/neo/events.js' ) }} " type="module"></script>
+        <script src="{{ url_for( 'static', filename='js/neo/defaults.js' ) }}" type="module"></script>
+        <script src="{{ url_for( 'static', filename='js/neo/neovis.js' ) }} " type="module"></script-->
+        <script src="{{ url_for( 'static', filename='js/neo/neovis-with-dependencies.js' ) }} "></script>
         <script src="{{ url_for( 'static', filename='js/graph.js' ) }} "></script>
+        <script src="{{ url_for( 'static', filename='js/main.js' ) }} "></script>
     </body>
 </html>
