@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src="{{ url_for( 'static', filename='js/socket.io.js' ) }} "></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap-4.4.1-dist/css/bootstrap.min.css') }}">
         <!--link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.4.1-dist/css/all.css') }}"-->
@@ -22,14 +23,14 @@
                     <div class="title">Commands</div>
                     <div class="commands">
                         <a href="#" class="command" title="MATCH relations=()-->() RETURN relations">
-                                Show all relationships
-                        </a>
+                                    Show all relationships
+                            </a>
                         <a href="#" class="command" title="MATCH (endpoint:endpoints) RETURN endpoint">
-                                Show all Endpoints
-                        </a>
+                                    Show all Endpoints
+                            </a>
                         <a href="#" class="command" title="MATCH relations=(source:endpoints)-[]->(destination:endpoints) where source.ip='{}' AND destination.ip='{x}' RETURN relations">
-                                Show spesific Address
-                        </a>
+                                    Show spesific Address
+                            </a>
                     </div>
                 </div>
                 <div class="left-section">
@@ -37,11 +38,11 @@
                     <div class="options">
                         {% for protocol in protocols["TCP"] %}
                         <a href="#" class="opt toggle-opt" title="{{ protocol }}">
-                                    {{ protocol }}
-                            </a> {% endfor %} {% for protocol in protocols["UDP"] %}
-                        <a href="#" class="opt toggle-opt" title="{{ protocol }}">
                                         {{ protocol }}
-                        </a> {% endfor %}
+                                </a> {% endfor %} {% for protocol in protocols["UDP"] %}
+                        <a href="#" class="opt toggle-opt" title="{{ protocol }}">
+                                            {{ protocol }}
+                            </a> {% endfor %}
                     </div>
                 </div>
             </div>
@@ -53,10 +54,10 @@
                         <i class="fas fa-upload"></i> Upload Pcap
                     </a>
                     <!--a class="import-btn-round floating-btn" id="stabilize" href="#" title="Stabilize">
-                        upload pcap <i class="fas fa-upload"></i>
-                    </a-->
+                            upload pcap <i class="fas fa-upload"></i>
+                        </a-->
                     <div class="hidden">
-                        <input type="file" name="pcap" id="upload-file" onchange='document.getElementById("upload-pcap").submit()'>
+                        <input type="file" name="pcap" id="upload-file" onchange='uploadPcap()'>
                     </div>
                 </form>
             </div>
@@ -67,9 +68,9 @@
 
             </div>
         </div>
-        <div class="loader">
+        <div class="lpercentoader">
             <div class="gif"><i class="fas fa-spinner fa-spin"></i></div>
-            <div class="percentage"><span class="per-number">10</span>%</div>
+            <div class="percentage"><span class="per-number">0</span>%</div>
         </div>
 
         <div id="Graph"></div>

@@ -1,15 +1,21 @@
+from re import A
 import helper
 from fire import Fire
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
+import socketio
 from uuid import uuid4
 import sys
 import os
 import json
+from time import sleep
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = str(uuid4())
+clients = {}
+
 socketio = SocketIO(app)
+
 
 # Dirs
 DB_FOLDER = "jsons/"
@@ -26,6 +32,7 @@ def graph():
 
     with open(DB) as db:
         newProtocols = json.load(db)
+
     return render_template('index.html',protocols=newProtocols)
 
 
@@ -37,6 +44,16 @@ def upload_pcap():
     with open(DB) as db:
         newProtocols = json.load(db)
     return render_template('index.html',protocols=newProtocols)
+
+
+@socketio.on('connect')
+def connect():
+    clients[request.sid] = socketio
+
+
+def sendData(percent):
+    print(percent)
+    socketio.emit('update', percent, namespace="/PVT")
 
 
 def showHelpMenu():
@@ -67,7 +84,7 @@ def startPVT(help=False, debug=False, web=False, dev=False,port=5000):
         if debug:
             socketio.run(app,debug=True, host='0.0.0.0', port=port)
         else:
-            app.run(debug=False, host='0.0.0.0', port=port)
+            socketio.run(app,debug=False, host='0.0.0.0', port=port)
 
 
 

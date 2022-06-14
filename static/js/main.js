@@ -127,3 +127,7 @@ function stop_loader() {
     $("#Graph").removeClass("darken");
 }
 
+
+socket.on("update", (percent) => {
+    alert(percent + "%")
+});

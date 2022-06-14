@@ -4,6 +4,7 @@ from re import sub
 import json
 from os import path, remove
 import glob
+from pvt import sendData
 from werkzeug.utils import secure_filename
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket, resetDB
 from scapy.layers.l2 import ARP
@@ -57,6 +58,8 @@ RIP_RESPONSE_CODE         = 2
 # Dirs
 DB = "jsons/data.db"
 PCAPS = "pcaps/"
+
+percent = 0
 initJson = json.loads('{"TCP":[],"UDP":[]}')
 
 httpReq = "HTTP"
@@ -100,7 +103,7 @@ def getLayer2PacketInfo(packet):
     }
 
 
-def compareLayer4Session(sessions,data, packetType):
+def compareLayer4Session(sessions,data,packetType):
     """
     If we got a packet the is the same but to the opposite side, skip.
        This will filter TCP/UDP sessions.
@@ -145,6 +148,12 @@ def compareLayer4Relation(sessions,data):
     return False
 
 
+def compareLayer2Relation(sessions,data):
+    for session in sessions:
+        if data["sourceMac"] == session["sourceMac"] and \
+            data["destinationMac"] == session["destinationMac"]:
+                return True
+
 def getServiceName(srcPort,dstPort,layer4Type):
     try:
         srcPortService = socket.getservbyport(srcPort)
@@ -173,8 +182,12 @@ def parse(pcap):
     pkts = scapy.all.rdpcap(pcap)
     tcpSessions = []
     udpSessions = []
-
+    arpConnections = []
+    count = 1
     for packet in pkts:
+        global percent
+        percent = (count) / len(pkts)
+        sendData(percent * 100)
         # Layer 3 and above
         if IP in packet:
             relationData = dict() 
@@ -249,7 +262,6 @@ def parse(pcap):
                 else:
                     packetType = getServiceName(int(packet[UDP].sport), int(packet[UDP].dport), UDP_PACKET)
                 
-                
                 updateProtocols(UDP_PACKET,packetType)
 
                 udpData = getLayer4PacketInfo(packet, UDP)
@@ -301,7 +313,12 @@ def parse(pcap):
             if ARP in packet:
                 arpData = getLayer2PacketInfo(packet)
                 arpPacket = ARPPacket(arpData)
-                arpPacket.addNodes()
+                if not compareLayer2Relation(arpConnections,arpData):
+                    arpPacket.addNodes()
+                
+                arpConnections.append(arpData)
+
+        count = count + 1        
 
 
 def saveFile(pcap):
@@ -315,4 +332,7 @@ def saveFile(pcap):
 
 def initDB():
     with open(DB, 'w') as db:
-        json.dump(initJson, db) 
+        json.dump(initJson, db)
+
+def getPercent():
+    return percent

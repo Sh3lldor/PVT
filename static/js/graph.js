@@ -1,4 +1,6 @@
 var viz;
+var socket = io('http://localhost:5001/PVT');
+
 var matchQuery = "MATCH p=()-[r:]->() RETURN p"
 var initialIndex = 14;
 
