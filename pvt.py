@@ -15,6 +15,7 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = str(uuid4())
 
 socketio = SocketIO(app,async_mode='threading')
+#socketio = SocketIO(app,async_mode='gevent')
 
 client = ""
 fullPath = ""
@@ -55,10 +56,11 @@ def connection():
     
     if "upload_pcap" in request.referrer:
         if fullPath:
-            #socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
-            thread = Thread(target = runParse, args = (fullPath,))
-            thread.start()
-            thread.join()
+            socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
+            #thread = Thread(target = runParse, args = (fullPath,client,socketio))
+            #thread = Thread(target = runParse, args = (fullPath,))
+            #thread.start()
+            #thread.join()
             socketio.emit("finish")
     else:
         pass
@@ -71,13 +73,16 @@ def updateSid(sid):
     print("================== Updating sid\n" + client + "\n===================")
 
 
-#def sendData(data):
-#    print("sending data")
-#    socketio.emit('finish', data, broadcast=True)
+def sendData(percent, client, sio):
+    print(f"{percent}%")
+    sio.emit('update', percent, room=client)
 
 
-def runParse(fullPath):
-    helper.parse(fullPath)
+#def runParse(fullPath):
+#    helper.parse(fullPath)
+
+def runParse(fullPath,client,sio):
+    helper.parse(fullPath,client,sio)
 
 
 def showHelpMenu():

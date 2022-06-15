@@ -1,3 +1,6 @@
 scapy
 neo4j
 fire
+gevent
+flask
+flask_socketio

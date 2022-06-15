@@ -129,9 +129,15 @@ function stop_loader() {
 
 
 socket.on("update", (percent) => {
-    console.log(percent + "%")
+    //console.log(percent + "%")
+    document.getElementById("percentage").innerHTML = percent
+    if (percent == 100) {
+        window.location.href = "/";
+    }
 });
 
 socket.on("finish", () => {
-    window.location.href = "/"
+    //window.location.href = "/";
+    //alert("DONE!");
+    start_loader();
 });

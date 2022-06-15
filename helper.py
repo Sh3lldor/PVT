@@ -4,7 +4,7 @@ from re import sub
 import json
 from os import path, remove
 import glob
-#from pvt import sendData
+from pvt import sendData
 from werkzeug.utils import secure_filename
 from packet import TCPPacket, UDPPacket, ICMPPacket, ARPPacket, resetDB
 from scapy.layers.l2 import ARP
@@ -182,19 +182,19 @@ def updateProtocols(layer4Type,service):
         json.dump(data, db) 
 
 
-#def parse(pcap, client, sio):
-def parse(pcap):
+def parse(pcap, client, sio):
+#def parse(pcap):
     pkts = scapy.all.rdpcap(pcap)
     tcpSessions = []
     udpSessions = []
     arpConnections = []
     count = 1
     for packet in pkts:
-        # Deprecated for now
 
-        #global percent
-        #percent = (count) / len(pkts)
-        #sendData(int(percent * 100), client, sio)
+        # Deprecated for now
+        global percent
+        percent = (count) / len(pkts)
+        sendData(int(percent * 100), client, sio)
 
         # Layer 3 and above
         if IP in packet:
@@ -210,7 +210,7 @@ def parse(pcap):
 
                 # DHCP Packet
                 elif DHCP in packet:
-                    packetType = DNS_QUERY_PACKET
+                    packetType = DHCP_PACKET
                 
                 # HSRP Packet
                 elif HSRP in packet:
