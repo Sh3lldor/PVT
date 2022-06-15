@@ -44,7 +44,13 @@
                                 </a> {% endfor %} {% for protocol in protocols["UDP"] %}
                     <a href="#" class="opt toggle-opt" title="{{ protocol }}">
                                             {{ protocol }}
-                            </a> {% endfor %}
+                            </a> {% endfor %} {% for protocol in protocols["Layer2"] %}
+                    <a href="#" class="opt toggle-opt" title="{{ protocol }}">
+                                                    {{ protocol }}
+                                    </a> {% endfor %} {% for protocol in protocols["Layer3"] %}
+                    <a href="#" class="opt toggle-opt" title="{{ protocol }}">
+                                                    {{ protocol }}
+                                    </a> {% endfor %}
                 </div>
             </div>
         </div>

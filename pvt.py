@@ -61,7 +61,7 @@ def connection():
             thread.join()
             socketio.emit("finish")
     else:
-        socketio.emit("update",0)
+        pass
 
 
 @socketio.on('updateSid')

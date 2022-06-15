@@ -46,6 +46,10 @@ SNMP_VERION_GENERAL_PACKET = "SNMP"
 TFTP_PACKET = "TFTP"
 TCP_PACKET = "TCP"
 UDP_PACKET = "UDP"
+ARP_PACKET = "ARP"
+LAYER_2 = "Layer2"
+ICMP_PACKET = "ICMP"
+LAYER_3 = "Layer3"
 
 # ResponseCodes
 NTP_SYMMETRIC_ACTIVE_CODE = 1
@@ -60,7 +64,7 @@ DB = "jsons/data.db"
 PCAPS = "pcaps/"
 
 percent = 0
-initJson = json.loads('{"TCP":[],"UDP":[]}')
+initJson = json.loads('{"TCP":[],"UDP":[],"Layer3":[],"Layer2":[]}')
 
 httpReq = "HTTP"
 
@@ -310,6 +314,7 @@ def parse(pcap):
             elif ICMP in packet:
                 icmpData = getLayer3PacketInfo(packet)
                 icmpPacket = ICMPPacket(icmpData)
+                updateProtocols(LAYER_3,ICMP_PACKET)
                 icmpPacket.addNodes()
 
         # Layer 2 or IPV6
@@ -317,6 +322,7 @@ def parse(pcap):
             if ARP in packet:
                 arpData = getLayer2PacketInfo(packet)
                 arpPacket = ARPPacket(arpData)
+                updateProtocols(LAYER_2,ARP_PACKET)
                 if not compareLayer2Relation(arpConnections,arpData):
                     arpPacket.addNodes()
                 

@@ -87,6 +87,7 @@ $(".toggle-opt").click(function() {
 
 $(".import-btn").click(function() {
     /* start_loader(); */
+    /* run start_loader after the new page has loaded in the right corner and add refresh button */
     $("#upload-file").click();
 })
 
