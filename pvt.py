@@ -14,7 +14,7 @@ app = Flask(__name__, template_folder="templates")
 
 app.secret_key = str(uuid4())
 
-socketio = SocketIO(app)
+socketio = SocketIO(app,async_mode='threading')
 
 client = ""
 fullPath = ""
@@ -42,7 +42,6 @@ def graph():
 def upload_pcap():
     global fullPath
     pcap = request.files.get("pcap")
-    print("=YYYYYYYYYYYYYYY\n" + client + "\n===================")
     fullPath = helper.saveFile(pcap)
     with open(DB) as db:
         newProtocols = json.load(db)
@@ -57,12 +56,12 @@ def connection():
     if "upload_pcap" in request.referrer:
         if fullPath:
             #socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
-            thread = Thread(target = runParse, args = (fullPath, client, socketio))
+            thread = Thread(target = runParse, args = (fullPath,))
             thread.start()
             thread.join()
+            socketio.emit("finish")
     else:
-        print(socketio)
-        socketio.emit("connect","main")
+        socketio.emit("update",0)
 
 
 @socketio.on('updateSid')
@@ -72,13 +71,13 @@ def updateSid(sid):
     print("================== Updating sid\n" + client + "\n===================")
 
 
-def sendData(percent, client, sio):
-    print(percent, " ==> ", client, " : ", sio)
-    sio.emit('update', percent, room=client)
+#def sendData(data):
+#    print("sending data")
+#    socketio.emit('finish', data, broadcast=True)
 
 
-def runParse(fullPath,client,sio):
-    helper.parse(fullPath, client,sio)
+def runParse(fullPath):
+    helper.parse(fullPath)
 
 
 def showHelpMenu():

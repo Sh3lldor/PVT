@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
 
     draw();
@@ -87,7 +86,7 @@ $(".toggle-opt").click(function() {
 })
 
 $(".import-btn").click(function() {
-    start_loader();
+    /* start_loader(); */
     $("#upload-file").click();
 })
 
@@ -129,5 +128,9 @@ function stop_loader() {
 
 
 socket.on("update", (percent) => {
-    alert(percent + "%")
+    console.log(percent + "%")
+});
+
+socket.on("finish", () => {
+    window.location.href = "/"
 });
