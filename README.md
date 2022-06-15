@@ -1,7 +1,9 @@
 # PVT
 PCAP visualization tool
 
-![icon](https://raw.githubusercontent.com/Sh3lldor/PVT/main/static/pics/icon.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Sh3lldor/PVT/main/static/pics/icon.png">
+</p>
 
 ## Table of Contents
 - [Overview](#Overview)
