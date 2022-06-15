@@ -7,13 +7,23 @@ PCAP visualization tool
 
 ## Table of Contents
 - [Overview](#Overview)
+- [Pictures](#Pics)
 - [Docker Installation](#Docker)
 - [Credits](#Credits)
 
 
 ## Overview
+PVT will visualize a given PCAP with neo4j and neovis in an easy and intuitive way.
 
-The Server panel will display all added server and basic information about the server such as: owned user, open port and if has been pwned.
+## Pics
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Sh3lldor/PVT/main/static/pics/1.png">
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Sh3lldor/PVT/main/static/pics/2.png">
+</p>
 
 ## Docker
 
