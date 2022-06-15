@@ -1,5 +1,5 @@
 var viz;
-var socket = io('http://localhost:5001/PVT');
+var socket = io('http://localhost:5001/');
 
 var matchQuery = "MATCH p=()-[r:]->() RETURN p"
 var initialIndex = 14;
@@ -284,6 +284,14 @@ function uploadPcap() {
     document.getElementById("upload-pcap").submit()
 }
 
+socket.on("connect", (arg) => {
+    console.log("baba " + socket.id);
+    //socket.emit("updateSid", socket.id);
+    if (arg) {
+        console.log(arg)
+    }
+});
+
 socket.on("update", (percent) => {
-    alert(percent + "%")
+    console.log(percent + "%")
 });

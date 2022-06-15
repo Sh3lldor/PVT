@@ -3,19 +3,21 @@ import helper
 from fire import Fire
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
-import socketio
 from uuid import uuid4
 import sys
 import os
 import json
 from time import sleep
+from threading import Thread
 
 app = Flask(__name__, template_folder="templates")
+
 app.secret_key = str(uuid4())
-clients = {}
 
 socketio = SocketIO(app)
 
+client = ""
+fullPath = ""
 
 # Dirs
 DB_FOLDER = "jsons/"
@@ -38,22 +40,45 @@ def graph():
 
 @app.route('/upload_pcap', methods=['POST'])
 def upload_pcap():
+    global fullPath
     pcap = request.files.get("pcap")
+    print("=YYYYYYYYYYYYYYY\n" + client + "\n===================")
     fullPath = helper.saveFile(pcap)
-    helper.parse(fullPath)
     with open(DB) as db:
         newProtocols = json.load(db)
     return render_template('index.html',protocols=newProtocols)
 
 
 @socketio.on('connect')
-def connect():
-    clients[request.sid] = socketio
+def connection():
+    global client
+    client = request.sid
+    
+    if "upload_pcap" in request.referrer:
+        if fullPath:
+            #socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
+            thread = Thread(target = runParse, args = (fullPath, client, socketio))
+            thread.start()
+            thread.join()
+    else:
+        print(socketio)
+        socketio.emit("connect","main")
 
 
-def sendData(percent):
-    print(percent)
-    socketio.emit('update', percent, namespace="/PVT")
+@socketio.on('updateSid')
+def updateSid(sid):
+    global client
+    client = sid
+    print("================== Updating sid\n" + client + "\n===================")
+
+
+def sendData(percent, client, sio):
+    print(percent, " ==> ", client, " : ", sio)
+    sio.emit('update', percent, room=client)
+
+
+def runParse(fullPath,client,sio):
+    helper.parse(fullPath, client,sio)
 
 
 def showHelpMenu():

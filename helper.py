@@ -178,7 +178,7 @@ def updateProtocols(layer4Type,service):
         json.dump(data, db) 
 
 
-def parse(pcap):
+def parse(pcap, client, sio):
     pkts = scapy.all.rdpcap(pcap)
     tcpSessions = []
     udpSessions = []
@@ -187,7 +187,7 @@ def parse(pcap):
     for packet in pkts:
         global percent
         percent = (count) / len(pkts)
-        sendData(percent * 100)
+        sendData(int(percent * 100), client, sio)
         # Layer 3 and above
         if IP in packet:
             relationData = dict() 
@@ -333,6 +333,3 @@ def saveFile(pcap):
 def initDB():
     with open(DB, 'w') as db:
         json.dump(initJson, db)
-
-def getPercent():
-    return percent
