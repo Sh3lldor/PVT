@@ -9,13 +9,13 @@ WORKDIR /PVT
 COPY . /PVT
 
 # Install the dependencies and packages in the requirements file
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Expose the port
-EXPOSE 80
+EXPOSE 8443
 
 # Configure the container to run in an executed manner
 ENTRYPOINT [ "python" ]
 
 # Run redeye
-CMD ["pvt.py", "--web", "--port", "80"]
+CMD ["pvt.py", "--web", "--port", "8443"]

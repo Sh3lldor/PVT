@@ -15,7 +15,6 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = str(uuid4())
 
 socketio = SocketIO(app,async_mode='threading')
-#socketio = SocketIO(app,async_mode='gevent')
 
 client = ""
 fullPath = ""
@@ -57,10 +56,6 @@ def connection():
     if "upload_pcap" in request.referrer:
         if fullPath:
             socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
-            #thread = Thread(target = runParse, args = (fullPath,client,socketio))
-            #thread = Thread(target = runParse, args = (fullPath,))
-            #thread.start()
-            #thread.join()
             socketio.emit("finish")
     else:
         pass
@@ -76,9 +71,6 @@ def sendData(percent, client, sio):
     sio.emit('update', percent, room=client)
 
 
-#def runParse(fullPath):
-#    helper.parse(fullPath)
-
 def runParse(fullPath,client,sio):
     helper.parse(fullPath,client,sio)
 
@@ -93,12 +85,12 @@ def showHelpMenu():
     --debug     Enable debug [Default: False]
     --web       Start Web service [Default: False]
     --dev       Load pcaps from Test directory [Default: False]
-    --port      Listening port for web service [Default: 5000]
+    --port      Listening port for web service [Default: 8443]
     """
     print(description)
 
 
-def startPVT(help=False, debug=False, web=False, dev=False,port=5000):
+def startPVT(help=False, debug=False, web=False, dev=False,port=8443):
     if help:
         showHelpMenu()
         sys.exit(0)

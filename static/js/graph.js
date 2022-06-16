@@ -1,5 +1,5 @@
 var viz;
-var socket = io('http://localhost:5001/');
+var socket = io('http://localhost:8443/');
 
 var matchQuery = "MATCH p=()-[r:]->() RETURN p"
 var initialIndex = 14;
