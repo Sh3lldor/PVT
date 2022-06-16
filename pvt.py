@@ -15,7 +15,6 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = str(uuid4())
 
 socketio = SocketIO(app,async_mode='threading')
-#socketio = SocketIO(app,async_mode='gevent')
 
 client = ""
 fullPath = ""
@@ -56,7 +55,6 @@ def connection():
     
     if "upload_pcap" in request.referrer:
         if fullPath:
-            print("Starting task")
             socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
             socketio.emit("finish")
     else:

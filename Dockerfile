@@ -18,4 +18,4 @@ EXPOSE 8443
 ENTRYPOINT [ "python" ]
 
 # Run pvt
-CMD ["pvt.py", "--web","--debug", "--port", "8443"]
+CMD ["pvt.py", "--web", "--port", "8443"]
