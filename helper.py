@@ -190,7 +190,6 @@ def parse(pcap, client, sio):
     arpConnections = []
     count = 1
     for packet in pkts:
-
         # Deprecated for now
         global percent
         percent = (count) / len(pkts)

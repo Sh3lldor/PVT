@@ -56,11 +56,8 @@ def connection():
     
     if "upload_pcap" in request.referrer:
         if fullPath:
+            print("Starting task")
             socketio.start_background_task(runParse,fullPath=fullPath,client=client,sio=socketio)
-            #thread = Thread(target = runParse, args = (fullPath,client,socketio))
-            #thread = Thread(target = runParse, args = (fullPath,))
-            #thread.start()
-            #thread.join()
             socketio.emit("finish")
     else:
         pass
@@ -70,16 +67,11 @@ def connection():
 def updateSid(sid):
     global client
     client = sid
-    print("================== Updating sid\n" + client + "\n===================")
 
 
 def sendData(percent, client, sio):
-    print(f"{percent}%")
     sio.emit('update', percent, room=client)
 
-
-#def runParse(fullPath):
-#    helper.parse(fullPath)
 
 def runParse(fullPath,client,sio):
     helper.parse(fullPath,client,sio)
