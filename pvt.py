@@ -70,11 +70,9 @@ def connection():
 def updateSid(sid):
     global client
     client = sid
-    print("================== Updating sid\n" + client + "\n===================")
 
 
 def sendData(percent, client, sio):
-    print(f"{percent}%")
     sio.emit('update', percent, room=client)
 
 

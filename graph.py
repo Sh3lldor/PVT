@@ -1,5 +1,6 @@
 from neo4j import *
 import os
+
 #neoServer = "neo4j"
 neoServer = "localhost"
 url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")

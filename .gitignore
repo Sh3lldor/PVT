@@ -2,3 +2,4 @@ Test/*
 pcaps/*
 jsons/*
 __pycache__/*
+PVTVirtualEnv/*
