@@ -22,6 +22,8 @@ fullPath = ""
 # Dirs
 DB_FOLDER = "jsons/"
 PCAP_FOLDER = "pcaps/"
+LOCAL_DEV = "localhost"
+LOCAL_PROD = "neo4j"
 
 # Files
 DB = "jsons/data.db"
@@ -96,8 +98,9 @@ def startPVT(help=False, debug=False, web=False, dev=False,port=8443):
         sys.exit(0)
 
     if dev:
-        for pcap in os.listdir("Test"):
-            helper.parse(f"Test/{pcap}")
+        os.environ["graphHost"] = LOCAL_DEV
+    else:
+        os.environ["graphHost"] = LOCAL_PROD
 
     if web:
         if debug:
