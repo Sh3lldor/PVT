@@ -86,7 +86,6 @@ def showHelpMenu():
     --pcap      PCAP path for visualization [Default: False].
     --debug     Enable debug [Default: False]
     --web       Start Web service [Default: False]
-    --dev       Load pcaps from Test directory [Default: False]
     --port      Listening port for web service [Default: 8443]
     """
     print(description)
