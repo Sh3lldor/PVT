@@ -10,7 +10,7 @@ function draw(query = "MATCH relations=()-->() RETURN relations") {
         container_id: "Graph",
         server_url: "bolt://localhost:7687",
         server_user: "neo4j",
-        server_password: "test",
+        server_password: "pvt",
         labels: {
             "endpoints": {
                 caption: "ip",

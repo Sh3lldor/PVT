@@ -2,10 +2,10 @@ from neo4j import *
 import os
 
 
-neoServer = os.getenv("graphHost")
+neoServer = "neo4j"
 url = os.getenv("NEO4J_URI", f"bolt://{neoServer}:7687")
 username = os.getenv("NEO4J_USER", "neo4j")
-password = os.getenv("NEO4J_PASSWORD", "test")
+password = os.getenv("NEO4J_PASSWORD", "pvt")
 neo4j_version = os.getenv("NEO4J_VERSION", "4")
 database = os.getenv("NEO4J_DATABASE", "PVT")
 

@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  redeye:
+  pvt:
     container_name: "PVT"
     build: .
     ports:

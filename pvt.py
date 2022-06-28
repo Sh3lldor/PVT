@@ -92,15 +92,10 @@ def showHelpMenu():
     print(description)
 
 
-def startPVT(help=False, debug=False, web=False, dev=False,port=8443):
+def startPVT(help=False, debug=False, web=False, port=8443):
     if help:
         showHelpMenu()
         sys.exit(0)
-
-    if dev:
-        os.environ["graphHost"] = LOCAL_DEV
-    else:
-        os.environ["graphHost"] = LOCAL_PROD
 
     if web:
         if debug:
