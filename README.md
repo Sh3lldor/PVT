@@ -46,7 +46,7 @@ docker load < PVT.tar
 ```
 
 ### General
-Redeye will listen on: http://0.0.0.0:8443</br>
+PVT will listen on: http://0.0.0.0:8443</br>
 
 Neo4j will listen on: http://0.0.0.0:7474</br>
 Default Credentials:
