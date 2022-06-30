@@ -22,6 +22,8 @@ fullPath = ""
 # Dirs
 DB_FOLDER = "jsons/"
 PCAP_FOLDER = "pcaps/"
+LOCAL_DEV = "localhost"
+LOCAL_PROD = "neo4j"
 
 # Files
 DB = "jsons/data.db"
@@ -84,20 +86,15 @@ def showHelpMenu():
     --pcap      PCAP path for visualization [Default: False].
     --debug     Enable debug [Default: False]
     --web       Start Web service [Default: False]
-    --dev       Load pcaps from Test directory [Default: False]
     --port      Listening port for web service [Default: 8443]
     """
     print(description)
 
 
-def startPVT(help=False, debug=False, web=False, dev=False,port=8443):
+def startPVT(help=False, debug=False, web=False, port=8443):
     if help:
         showHelpMenu()
         sys.exit(0)
-
-    if dev:
-        for pcap in os.listdir("Test"):
-            helper.parse(f"Test/{pcap}")
 
     if web:
         if debug:
