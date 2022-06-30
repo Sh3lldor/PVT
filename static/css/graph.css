@@ -238,3 +238,12 @@ body {
 .loader .gif {
     font-size: 62px;
 }
+
+.rights {
+    position: fixed;
+    bottom: 3px;
+    right: 16px;
+    font-size: 15px;
+    color: #666;
+    font-family: 'Times New Roman', Times, serif;
+}
