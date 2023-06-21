@@ -1,5 +1,5 @@
 # Start by pulling the python image
-FROM python:latest
+FROM python:3.10.9
 
 # Copy the requirements file into the image
 RUN mkdir -p /PVT

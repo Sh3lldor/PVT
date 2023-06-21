@@ -8,7 +8,7 @@ services:
     links:
       - "neo4j:neo4j"
   neo4j:
-    image: "neo4j:latest"
+    image: "neo4j:4.4.9"
     ports:
       - "0.0.0.0:7474:7474"
       - "0.0.0.0:7687:7687"
